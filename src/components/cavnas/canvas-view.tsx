@@ -3,13 +3,13 @@ import React from 'react'
 import CanvasContextProvider from './canvas-provider'
 import Canvas from './canvas'
 import CanvasToolBar from './canvas-tool-bar'
+import CanvasOptions from './canvas-options'
 
 const CanvasView = () => {
   return (
     <CanvasContextProvider>
-        <main className='w-full bg-primary/10  h-screen overflow-hidden hidden sm:flex'>
+        <main className='w-full p-2  bg-primary/10 dark:bg-primary/5 h-screen overflow-hidden hidden sm:flex'>
         <CanvasToolBar/>
-        <aside className='w-[300px] bg-background'></aside>
         <Canvas/>
         <aside className='w-[200px] bg-background'></aside>
         </main>
