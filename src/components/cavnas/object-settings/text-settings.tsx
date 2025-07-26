@@ -255,7 +255,7 @@ const TextSettings = () => {
  <>
   {/* === Style Icons === */}
   <div className={cn(
-    "flex transition-all duration-500 ease-in-out items-center gap-2 bg-background fixed  px-3 py-2 rounded-xl  flex-col border top-1/2 -translate-y-1/2 z-10",
+    "flex transition-all  duration-500 ease-in-out items-center gap-2 bg-background fixed  px-3 py-2 rounded-xl  flex-col border top-1/2 -translate-y-1/2 z-10",
     isFont ? "right-[330px]  pointer-events-auto":"opacity-0 pointer-events-auto right-0"
   )}>
     {fabricTextStyles.map((style, i) => (
@@ -274,7 +274,7 @@ const TextSettings = () => {
 
    <div className={
     cn(
-        "fixed z-50 top-[4.5rem] transition-all duration-500 ease-in-out left-1/2 -translate-x-1/2 bg-background border rounded-2xl px-4 py-2 flex items-center gap-6 w-fit",
+        "fixed z-50 top-[4.5rem] transition-all duration-500 ease-in-out left-1/2 -translate-x-1/2 bg-background/70 border rounded-2xl px-4 py-2 flex items-center gap-6 w-fit",
         isFont ? " top-[4.5rem] opacity-100":'pointer-events-none opacity-0 top-0'
     )
    }>

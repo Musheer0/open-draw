@@ -3,6 +3,11 @@ import { Canvas, Circle, Ellipse, IText, Line,  Polygon, Rect, Triangle } from "
 export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
     
     if(canvas){
+      const updatedCanvas = (obj:any)=>{
+          canvas.add(obj);
+        canvas.setActiveObject(obj)
+        canvas.renderAll()
+      }
        if(shape=='rect'){
          const new_shape = new  Rect({
             width:50,
@@ -12,8 +17,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
             fill:'black',
             strokeWidth: 0
         });
-        canvas.add(new_shape);
-        canvas.renderAll()
+       updatedCanvas(new_shape);
        }
        if(shape=='circle'){
          const new_shape = new  Circle({
@@ -23,8 +27,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
             fill:'black',
             strokeWidth: 0
         });
-        canvas.add(new_shape);
-        canvas.renderAll()
+     updatedCanvas(new_shape);
        }
        if(shape=='triangle'){
          const new_shape = new  Triangle({
@@ -37,8 +40,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
             angle:0,
             
         });
-        canvas.add(new_shape);
-        canvas.renderAll()
+    updatedCanvas(new_shape);
        }
        if(shape=='line'){
          const new_shape =new Line([50,50,200,200],{
@@ -48,8 +50,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
                 strokeWidth:4,
                 
             });
-        canvas.add(new_shape);
-        canvas.renderAll()
+    updatedCanvas(new_shape);
        }
        if(shape=='ellipse'){
          const new_shape = new Ellipse({
@@ -61,8 +62,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
         originY: "top",
         fill: "black",
       });
-        canvas.add(new_shape);
-        canvas.renderAll()
+    updatedCanvas(new_shape);
        }
        if(shape=='sh-pt'){
         
@@ -84,8 +84,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
           fill: "black",
         }
       );
-        canvas.add(new_shape);
-        canvas.renderAll()
+    updatedCanvas(new_shape);
        }
          if(shape=='sh-h'){
         
@@ -112,8 +111,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
        }
        if(shape==="i-text"){
        const text = new IText('Your Text Here');
-       canvas.add(text);
-       canvas.renderAll()
+    updatedCanvas(text);
     }
 }
 }

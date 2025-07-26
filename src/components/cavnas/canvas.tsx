@@ -85,14 +85,16 @@ const Canvas = () => {
     if(!activeObj) return;
     const top = activeObj.get('top')
     const left = activeObj.get('left');
-    if((e.ctrlKey || e.metaKey )&& e.key=='s'){
+    if((e.ctrlKey || e.metaKey )&& e.key=='l'){
       e.preventDefault()
-      const url = activeObj.toDataURL();
-      const atag = document.createElement('a');
-      atag.download = activeObj.type
-      atag.href = url;
-      atag.click()
+      const locked = activeObj.evented;
+      activeObj.set({
+        selectable:!locked,
+    evented: !locked
+      })
     }
+        if(!activeObj.evented) return
+
   switch (e.key) {
     case 'ArrowUp':
       e.preventDefault()
@@ -138,7 +140,7 @@ useEffect(()=>{
 },[MoveFunction])
     
   return (
-    <div className='h-full py-20.5 thin-scrollbar items-cent justify-center  p-2 flex-1 flex   overflow-auto'>
+    <div className='h-full py-20.5 pt-[7rem] thin-scrollbar items-cent justify-center  p-2 flex-1 flex   overflow-auto'>
         <canvas ref={canvasRef}  className='mx-auto'/>
     </div>
   )

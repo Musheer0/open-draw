@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { useCanvas } from "../canvas-provider"
 import { Button } from "@/components/ui/button"
-import { Trash2Icon } from "lucide-react" 
+import { LockIcon, LockOpenIcon, Trash2Icon } from "lucide-react" 
 import {  BringToFront, EyeIcon, EyeOffIcon, MoreHorizontalIcon, MoveDownIcon, MoveUpIcon, SendToBack } from "lucide-react"
 import { cn } from "@/lib/utils"
     import {
@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 const ObjectLayers = () => {
   const { canvas } = useCanvas()
   const [layers, setLayers] = useState<any[]>([])
-  const [activeObj, setActiveObj] = useState<any | null>(null)
+  const [activeObj, setActiveObj] = useState<any | null>(null);
 //   useEffect(()=>{
 //     const layerswithId = layers.map((l)=>{
 //         if(!l?.id) {
@@ -61,7 +61,13 @@ const ObjectLayers = () => {
     canvas?.renderAll()
     setActiveObj(obj)
   }
-
+  const ToggleLocked = (obj:any)=>{
+    const locked = obj.evented;
+    obj.set({
+    selectable:!locked,
+    evented: !locked
+});
+  }
   const toggleVisibility = (obj: any) => {
     obj.set("visible", !obj.visible)
     canvas?.renderAll()
@@ -128,10 +134,19 @@ const ObjectLayers = () => {
             key={obj?.myId || obj?.id || i} // use a stable key
             onClick={() => handleClick(obj)}
             className={cn(
-              "p-3 border flex items-center justify-between gap-2 rounded-xl hover:bg-muted/20 cursor-pointer transition",
+              "p-3 border flex relative items-center overflow-hidden justify-between gap-2 rounded-xl hover:bg-muted/20 cursor-pointer transition",
               activeObj === obj && "bg-primary/10 border-primary"
             )}
           >
+                  {!obj.evented ? <><div
+                  onClick={()=>{
+                    ToggleLocked(obj)
+                  }}
+                  className="absolute top-0 left-0 text-sm gap-2 backdrop-blur-sm rounded-xl w-full h-full bg-red-600/10 text-red-600 flex items-center justify-center">
+                  <LockIcon size={14}  />  Click To UnLock
+                  
+                  </div></>:<></>} 
+
             <img
               src={obj.toDataURL()}
               className="w-5 h-5 object-cover border rounded bg-white"
@@ -152,7 +167,6 @@ const ObjectLayers = () => {
     {/* Visibility Toggle */}
     <Button
       onClick={(e) => {
-        e.stopPropagation()
         toggleVisibility(obj)
       }}
       size="sm"
@@ -160,6 +174,16 @@ const ObjectLayers = () => {
       className="justify-start gap-2"
     >
       {obj.visible ? <EyeIcon /> : <EyeOffIcon />} Visibility
+    </Button>
+    <Button
+      onClick={(e) => {
+        ToggleLocked(obj)
+      }}
+      size="sm"
+      variant="ghost"
+      className="justify-start gap-2"
+    >
+      {obj.evented ? <><LockOpenIcon /> Lock</>:<> <LockIcon /> UnLock</>} 
     </Button>
   <Button
       onClick={()=>{
