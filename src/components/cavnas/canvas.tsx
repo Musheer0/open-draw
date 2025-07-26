@@ -63,19 +63,6 @@ const Canvas = () => {
           
         }
       }
-      if(e.key==='Backspace'){
-         const active = canvas.getActiveObject();
-          if(active){
-            if(active.type==='i-text' ){
-
-              if((active as IText).isEditing){
-                return
-              }
-            }
-            canvas.remove(active);
-          canvas.renderAll()
-          }
-      }
       if(e.key==='Escape'){
  const activeObject = canvas.getActiveObject();
     

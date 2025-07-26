@@ -6,6 +6,7 @@ import CanvasToolBar from './canvas-tool-bar'
 import CanvasOptions from './canvas-options'
 import ObjectSettingsSideBar from './object-settings/object-settings-sidebar'
 import TextSettings from './object-settings/text-settings'
+import ObjectLayersSideBar from './object-layers/object-layers-sidebar'
 
 const CanvasView = () => {
   return (
@@ -13,6 +14,7 @@ const CanvasView = () => {
         <main className='w-full p-2  transparent h-screen overflow-hidden hidden lg:flex'>
         <CanvasToolBar/>
         <TextSettings/>
+        <ObjectLayersSideBar/>
         <Canvas/>
        <ObjectSettingsSideBar/>
         </main>

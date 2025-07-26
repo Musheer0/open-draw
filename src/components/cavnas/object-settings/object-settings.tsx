@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { act, useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
 import { ChromePicker } from 'react-color'
 import { FabricObject, Rect, Shadow } from 'fabric'
@@ -30,13 +30,16 @@ const ColorPicker = ({ title, onChange, value }: { title: string, onChange: (e: 
 
 const ObjectSettings = ({ activeObject }: { activeObject: any }) => {
   const { canvas } = useCanvas()
-  const [fill, setFill] = useState('#fff')
+  const [fill, setFill] = useState('#fff');
+  const [Background ,setBackground] = useState('#0000')
   const [border, setBorder] = useState({ color: '#000000', width: 1 })
   const [dimensions, setDimensions] = useState({ width: 100, height: 100 })
 const [opacity, setOpacity] = useState(1)
 const [angle, setAngle] = useState(0)
 const [scale, setScale] = useState({ x: 1, y: 1 })
 const [position, setPosition] = useState({ x: 0, y: 0 })
+const [padding, setPadding] = useState(0)
+
 const [radius ,setRadius] = useState({
     rx: 0,
     ry:  0,
@@ -59,7 +62,12 @@ setScale({
 setPosition({
   x: activeObject.left ?? 0,
   y: activeObject.top ?? 0
-})
+});
+if (activeObject.type === 'i-text') {
+  setPadding(activeObject.padding || 0)
+}
+
+setBackground(activeObject.backgroundColor)
 if (activeObject instanceof Rect ) {
   setRadius({
     rx: activeObject?.rx || 0,
@@ -179,6 +187,13 @@ const handleAngleChange = (value: number) => {
     updateCanvas()
   }
 }
+const handlePaddingChange = (value: number) => {
+  if (activeObject?.type === 'i-text') {
+    setPadding(value)
+    activeObject.set({ padding: value })
+    updateCanvas()
+  }
+}
 
 
 const handleScaleChange = (key: 'x' | 'y', value: number) => {
@@ -225,11 +240,21 @@ const handleRadiusChange = (key: 'rx' | 'ry', value: number) => {
   canvas.requestRenderAll();
 };
 
+const handleBackgroundColor = (e:string)=>{
+  if(canvas && activeObject){
+    setBackground(e);
+    activeObject.set({
+      backgroundColor: e
+    });
+    updateCanvas();
+  }
+}
 
   if (!canvas) return null
 
   return (
     <div className='flex flex-col pb-10 thin-scrollbar overflow-y-auto h-full flex-1 w-full gap-4 pt-5'>
+      <ColorPicker title='Background Color' value={Background} onChange={handleBackgroundColor} />
       <ColorPicker title='Fill Color' value={fill} onChange={handleFillColorChange} />
       <ColorPicker title='Border Color' value={border.color} onChange={handleBorderColorChange} />
       {/* //BORDER */}
@@ -285,6 +310,19 @@ const handleRadiusChange = (key: 'rx' | 'ry', value: number) => {
           />
         </div>
       </div>
+    {/**PADDING */}
+    {activeObject?.type === 'i-text' && (
+  <div className='flex items-center justify-between px-2'>
+    <p className='text-sm'>Padding</p>
+    <Input
+      type='number'
+      min={0}
+      value={padding}
+      className='w-20'
+      onChange={(e) => handlePaddingChange(Number(e.target.value))}
+    />
+  </div>
+)}
 
       {/* //ROTATION */}
       <div className='flex items-center justify-between px-2'>
@@ -395,7 +433,7 @@ const handleRadiusChange = (key: 'rx' | 'ry', value: number) => {
     </div>
   </div>
 )}
-
+       
       {/* //DELETE */}
         <div className='flex items-center justify-between px-2'>
   <p className='text-sm'>Romove Object</p>

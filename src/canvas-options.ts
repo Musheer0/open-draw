@@ -5,10 +5,10 @@ import {
   SquareIcon,
   CircleIcon,
   TriangleIcon,
-  HeadingIcon,
   LineChartIcon,
   PentagonIcon,
   HexagonIcon,
+  Type,
 } from "lucide-react";
 import AddImageDropDown from "./components/cavnas/image/add-image-drop-down";
 import BackgroundSettings from "./components/cavnas/background-settings/background-settings";
@@ -65,7 +65,7 @@ export const SingleCickInsertOptions = [
   // },
   {
     name: 'Text',
-    icon: HeadingIcon,
+    icon: Type,
     slug: 'i-text' as InsertOptionsSlug,
     img: null,
   },
