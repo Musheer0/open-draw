@@ -1,59 +1,77 @@
 import {
   ImageIcon,
   SettingsIcon,
-  TextIcon,
   PaletteIcon,
-  LayoutTemplateIcon,
   SquareIcon,
   CircleIcon,
   TriangleIcon,
-  PencilIcon,
-  PenIcon,
-  HeadingIcon
+  HeadingIcon,
+  LineChartIcon,
+  PenToolIcon,
+  PentagonIcon,
+  HexagonIcon,
+  LucideIcon
 } from "lucide-react";
 import AddImageDropDown from "./components/cavnas/image/add-image-drop-down";
 import BackgroundSettings from "./components/cavnas/background-settings/background-settings";
 
 
-
-export const SingleCickInsertOptions =[
-      {
+export const SingleCickInsertOptions = [
+  {
     name: 'Square',
     icon: SquareIcon,
     slug: 'sh-r' as InsertOptionsSlug,
-    img:null
+    img: null,
   },
-      {
+  {
     name: 'Circle',
     icon: CircleIcon,
     slug: 'sh-c' as InsertOptionsSlug,
-    img:null
+    img: null,
   },
-      {
+  {
     name: 'Triangle',
     icon: TriangleIcon,
     slug: 'sh-tr' as InsertOptionsSlug,
-    img:null
+    img: null,
   },
-      {
+  {
     name: 'Line',
-    icon: null,
+    icon: LineChartIcon,
     slug: 'sh-l' as InsertOptionsSlug,
-    img: '/sh-l.png'
+    img: null,
+  },
+  {
+    name: 'Ellipse',
+    icon: null,
+    slug: 'sh-e' as InsertOptionsSlug,
+    img: '/sh-e.png',
+  },
+  {
+    name: 'Pentagon',
+    icon: PentagonIcon,
+    slug: 'sh-pt' as InsertOptionsSlug,
+    img: null,
+  },
+  {
+    name: 'Polyline',
+    icon: HexagonIcon,
+    slug: 'sh-h' as InsertOptionsSlug,
+    img: null,
   },
   // {
-  //   name: 'Pen',
-  //   icon: PenIcon,
-  //   slug: 'sh-p' as InsertOptionsSlug,
-  //   img:null
+  //   name: 'Path',
+  //   icon: PenToolIcon,
+  //   slug: 'sh-pt' as InsertOptionsSlug,
+  //   img: null,
   // },
   {
     name: 'Text',
     icon: HeadingIcon,
     slug: 'txt' as InsertOptionsSlug,
-    img:null
+    img: null,
   },
-]
+];
 
 
 export const InsertOptions = [
@@ -71,13 +89,6 @@ export const InsertOptions = [
 
   },
   {
-    name: 'Templates',
-    icon: LayoutTemplateIcon, 
-    slug: 'tp' as InsertOptionsSlug,
-        component:AddImageDropDown
-
-  },
-  {
     name: 'Settings',
     icon: SettingsIcon,
     slug: 'sg' as InsertOptionsSlug,
@@ -86,4 +97,18 @@ export const InsertOptions = [
   },
 ]
 
-export type InsertOptionsSlug = 'sh-r'|'sh-c'|'sh-tr'|'sh-l' | 'txt' | 'img' | 'bg' | 'tp' | 'sg'|'sh-p';
+export type InsertOptionsSlug =
+  | 'sh-r'   // Rectangle / Square
+  | 'sh-c'   // Circle
+  | 'sh-tr'  // Triangle
+  | 'sh-l'   // Line
+  | 'sh-e'   // Ellipse
+  | 'sh-pg'  // Polygon
+  | 'sh-h'  // Polyline
+  | 'sh-pt'  // Path
+  | 'sh-p'   // Pen tool (free drawing or path)
+  | 'txt'    // Text
+  | 'img'    // Image
+  | 'bg'     // Background
+  | 'tp'     // Template
+  | 'sg';    // Sticker / SVG

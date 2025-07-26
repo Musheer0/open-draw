@@ -14,6 +14,7 @@ import { useCanvas } from './canvas-provider'
 import { AddShape } from './utils'
 import { ModeToggle } from '../ui/mode-toggle'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import History from './history/history'
 const CanvasToolBar = () => {
     const {canvas} = useCanvas()
   return (
@@ -51,10 +52,8 @@ const CanvasToolBar = () => {
                  </DropdownMenu>
             )
         })}
-        <div className="history flex gap-2 px-2 ">
-                <button className='p-2 hover:bg-muted-foreground/10 cursor-pointer rounded-xl'><ArrowLeft size={14}/></button>
-            <button className='p-2 hover:bg-muted-foreground/10 cursor-pointer rounded-xl'><ArrowRight  size={14}/></button>
-        </div>
+        <History/>
+        
         <ModeToggle/>
        <ExportCanvas title='test canvas'/>
         </div>

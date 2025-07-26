@@ -1,6 +1,5 @@
 import { InsertOptionsSlug } from "@/canvas-options";
-import { Canvas, Circle, IText, Line, Rect, Triangle } from "fabric";
-import fabric from 'fabric'
+import { Canvas, Circle, Ellipse, IText, Line, Path, Polygon, Rect, Triangle } from "fabric";
 export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
     
     if(canvas){
@@ -35,7 +34,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
             left:0,
             fill:'black',
             strokeWidth: 0,
-            angle:2
+            angle:0
         });
         canvas.add(new_shape);
         canvas.renderAll()
@@ -47,6 +46,76 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
                 stroke: 'black',
                 strokeWidth:4
             });
+        canvas.add(new_shape);
+        canvas.renderAll()
+       }
+       if(shape=='sh-e'){
+         const new_shape = new Ellipse({
+        rx: 50,
+        ry: 30,
+        left: 100,
+        top: 100,
+        originX: "left",
+        originY: "top",
+        fill: "black",
+      });
+        canvas.add(new_shape);
+        canvas.renderAll()
+       }
+       if(shape==="sh-pt"){
+         const new_shape = new Path("M 0 0 L 100 100 L 200 0 Z", {
+        left: 100,
+        top: 100,
+        fill: "black",
+        stroke: "black",
+        strokeWidth: 1,
+      });
+        canvas.add(new_shape);
+        canvas.renderAll()
+       }
+       if(shape=='sh-pt'){
+        
+       const size = 50;
+       const centerX = 100;
+       const centerY = 100;
+
+       const pentagonPoints = Array.from({ length: 5 }, (_, i) => {
+      const angle = (i * (2 * Math.PI)) / 5 - Math.PI / 2; // start at top
+       return {
+        x: centerX + size * Math.cos(angle),
+       y: centerY + size * Math.sin(angle),
+      };
+       });
+         const new_shape = new Polygon(pentagonPoints,
+        {
+          left: 100,
+          top: 100,
+          fill: "black",
+        }
+      );
+        canvas.add(new_shape);
+        canvas.renderAll()
+       }
+         if(shape=='sh-h'){
+        
+         const size = 50;
+         const centerX = 100;
+           const centerY = 100;
+
+            const pentagonPoints = Array.from({ length: 6 }, (_, i) => {
+           const angle = (i * (2 * Math.PI)) / 6 - Math.PI / 2; // start at top
+            return {
+         x: centerX + size * Math.cos(angle),
+            y: centerY + size * Math.sin(angle),
+        };
+       });
+         const new_shape = new Polygon(pentagonPoints,
+        {
+          left: 100,
+          top: 100,
+          fill: "black",
+        }
+      );
         canvas.add(new_shape);
         canvas.renderAll()
        }
