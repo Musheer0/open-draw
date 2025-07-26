@@ -3,7 +3,7 @@ import { Canvas, Circle, Ellipse, IText, Line, Path, Polygon, Rect, Triangle } f
 export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
     
     if(canvas){
-       if(shape=='sh-r'){
+       if(shape=='rect'){
          const new_shape = new  Rect({
             width:50,
             height:50,
@@ -15,7 +15,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
         canvas.add(new_shape);
         canvas.renderAll()
        }
-       if(shape=='sh-c'){
+       if(shape=='circle'){
          const new_shape = new  Circle({
            radius:25,
             top:50,
@@ -26,7 +26,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
         canvas.add(new_shape);
         canvas.renderAll()
        }
-       if(shape=='sh-tr'){
+       if(shape=='triangle'){
          const new_shape = new  Triangle({
             width:50,
             height:50,
@@ -34,22 +34,24 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
             left:0,
             fill:'black',
             strokeWidth: 0,
-            angle:0
+            angle:0,
+            
         });
         canvas.add(new_shape);
         canvas.renderAll()
        }
-       if(shape=='sh-l'){
+       if(shape=='line'){
          const new_shape =new Line([50,50,200,200],{
                 left:50,
                 right:50,
                 stroke: 'black',
-                strokeWidth:4
+                strokeWidth:4,
+                
             });
         canvas.add(new_shape);
         canvas.renderAll()
        }
-       if(shape=='sh-e'){
+       if(shape=='ellipse'){
          const new_shape = new Ellipse({
         rx: 50,
         ry: 30,
@@ -58,17 +60,6 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
         originX: "left",
         originY: "top",
         fill: "black",
-      });
-        canvas.add(new_shape);
-        canvas.renderAll()
-       }
-       if(shape==="sh-pt"){
-         const new_shape = new Path("M 0 0 L 100 100 L 200 0 Z", {
-        left: 100,
-        top: 100,
-        fill: "black",
-        stroke: "black",
-        strokeWidth: 1,
       });
         canvas.add(new_shape);
         canvas.renderAll()
@@ -119,7 +110,7 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
         canvas.add(new_shape);
         canvas.renderAll()
        }
-       if(shape==="txt"){
+       if(shape==="i-text"){
        const text = new IText('Your Text Here');
        canvas.add(text);
        canvas.renderAll()

@@ -18,7 +18,7 @@ import History from './history/history'
 const CanvasToolBar = () => {
     const {canvas} = useCanvas()
   return (
-    <div className='w-fit z-10 rounded-2xl pr-2 border flex items-center gap-2 bg-background fixed top-2 left-1/2 -translate-x-1/2 px-4 p-2'>
+    <div className='w-fit z-10 rounded-2xl pr-2 border flex items-center gap-2 bg-background fixed top-2 xl:left-1/2  xl:-translate-x-1/2 px-4 p-2'>
         {SingleCickInsertOptions.map((e)=>{
             return(
                 <HoverCard key={e.slug} >

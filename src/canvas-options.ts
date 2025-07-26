@@ -7,10 +7,8 @@ import {
   TriangleIcon,
   HeadingIcon,
   LineChartIcon,
-  PenToolIcon,
   PentagonIcon,
   HexagonIcon,
-  LucideIcon
 } from "lucide-react";
 import AddImageDropDown from "./components/cavnas/image/add-image-drop-down";
 import BackgroundSettings from "./components/cavnas/background-settings/background-settings";
@@ -20,31 +18,31 @@ export const SingleCickInsertOptions = [
   {
     name: 'Square',
     icon: SquareIcon,
-    slug: 'sh-r' as InsertOptionsSlug,
+    slug: 'rect' as InsertOptionsSlug,
     img: null,
   },
   {
     name: 'Circle',
     icon: CircleIcon,
-    slug: 'sh-c' as InsertOptionsSlug,
+    slug: 'circle' as InsertOptionsSlug,
     img: null,
   },
   {
     name: 'Triangle',
     icon: TriangleIcon,
-    slug: 'sh-tr' as InsertOptionsSlug,
+    slug: 'triangle' as InsertOptionsSlug,
     img: null,
   },
   {
     name: 'Line',
     icon: LineChartIcon,
-    slug: 'sh-l' as InsertOptionsSlug,
+    slug: 'line' as InsertOptionsSlug,
     img: null,
   },
   {
     name: 'Ellipse',
     icon: null,
-    slug: 'sh-e' as InsertOptionsSlug,
+    slug: 'ellipse' as InsertOptionsSlug,
     img: '/sh-e.png',
   },
   {
@@ -68,7 +66,7 @@ export const SingleCickInsertOptions = [
   {
     name: 'Text',
     icon: HeadingIcon,
-    slug: 'txt' as InsertOptionsSlug,
+    slug: 'i-text' as InsertOptionsSlug,
     img: null,
   },
 ];
@@ -78,7 +76,7 @@ export const InsertOptions = [
   {
     name: 'Image',
     icon: ImageIcon,
-    slug: 'img' as InsertOptionsSlug,
+    slug: 'image' as InsertOptionsSlug,
     component:AddImageDropDown
   },
   {
@@ -98,17 +96,17 @@ export const InsertOptions = [
 ]
 
 export type InsertOptionsSlug =
-  | 'sh-r'   // Rectangle / Square
-  | 'sh-c'   // Circle
-  | 'sh-tr'  // Triangle
-  | 'sh-l'   // Line
-  | 'sh-e'   // Ellipse
+  | 'rect'   // Rectangle / Square
+  | 'circle'   // Circle
+  | 'triangle'  // Triangle
+  | 'line'   // Line
+  | 'ellipse'   // Ellipse
   | 'sh-pg'  // Polygon
   | 'sh-h'  // Polyline
   | 'sh-pt'  // Path
   | 'sh-p'   // Pen tool (free drawing or path)
-  | 'txt'    // Text
-  | 'img'    // Image
+  | 'i-text'    // Text
+  | 'image'    // Image
   | 'bg'     // Background
   | 'tp'     // Template
   | 'sg';    // Sticker / SVG

@@ -67,6 +67,7 @@ const Canvas = () => {
          const active = canvas.getActiveObject();
           if(active){
             if(active.type==='i-text' ){
+
               if((active as IText).isEditing){
                 return
               }
@@ -75,6 +76,13 @@ const Canvas = () => {
           canvas.renderAll()
           }
       }
+      if(e.key==='Escape'){
+ const activeObject = canvas.getActiveObject();
+    
+    if (activeObject) {
+      canvas.discardActiveObject(); 
+      canvas.requestRenderAll(); 
+    }      }
     };
     useEffect(()=>{
       window.addEventListener("keydown",Delete);

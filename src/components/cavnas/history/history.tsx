@@ -17,7 +17,6 @@ const History = () => {
 
     const handleChange = () => {
       if(isRestoring.current===true) return;
-      console.log('buf')
       const snapshot = canvas.toJSON()
       setUndoStack((prev) => [...prev, snapshot])
       setRedoStack([]) 
