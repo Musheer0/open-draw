@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 "use client"
 
 import React, { useEffect, useState } from "react"
@@ -7,7 +8,6 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { ShieldCheckIcon, ShieldAlertIcon } from "lucide-react"
 import {
-  Bold,
   Italic,
   Underline,
   Strikethrough,

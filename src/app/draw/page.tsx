@@ -1,9 +1,11 @@
 import CanvasView from '@/components/cavnas/canvas-view'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <CanvasView/>
+   <Suspense fallback="Loading">
+     <CanvasView/>
+   </Suspense>
   )
 }
 

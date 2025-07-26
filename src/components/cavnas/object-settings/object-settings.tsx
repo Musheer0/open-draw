@@ -1,8 +1,9 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 "use client"
-import React, { act, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
 import { ChromePicker } from 'react-color'
-import { FabricObject, Rect, Shadow } from 'fabric'
+import { FabricObject, Rect } from 'fabric'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
@@ -39,12 +40,13 @@ const [angle, setAngle] = useState(0)
 const [scale, setScale] = useState({ x: 1, y: 1 })
 const [position, setPosition] = useState({ x: 0, y: 0 })
 const [padding, setPadding] = useState(0)
-
+const [dimensionsLocked, setDimensionsLocked] = useState(false)
 const [radius ,setRadius] = useState({
     rx: 0,
     ry:  0,
   });
   const [radiusLocked, setRadiusLocked] = useState(true);
+  const [ScaleLocked, setScaleLocked] = useState(true);
 
 const UpdateStatus = ()=>{
       if (activeObject instanceof FabricObject) {
@@ -143,11 +145,16 @@ useEffect(()=>{
     }
   }
 
-  const handleDimensionChange = (key: 'width' | 'height', value: number) => {
+  const handleDimensionChange = (key: 'width' | 'height'|"both", value: number) => {
     if (!activeObject || !(activeObject instanceof FabricObject)) return
-
-    const newDims = { ...dimensions, [key]: value }
+    if(key==='both'|| dimensionsLocked){
+    setDimensions({width:value,height:value})
+    }
+    else{
+       const newDims = { ...dimensions, [key]: value }
     setDimensions(newDims)
+    }
+   
 
     // Fabric scales objects instead of resizing by default
     const original = {
@@ -164,6 +171,10 @@ useEffect(()=>{
 
     }
     else{
+       if(key==='both' || dimensionsLocked){
+              activeObject.set({ width: value,height:value })
+
+       }
         if (key === 'width') {
       activeObject.set({ width: value })
     } else {
@@ -198,10 +209,15 @@ const handlePaddingChange = (value: number) => {
 
 const handleScaleChange = (key: 'x' | 'y', value: number) => {
   if (!activeObject || !(activeObject instanceof FabricObject)) return
-
+    if(ScaleLocked){
+        activeObject.set({ scaleX: value,scaleY:value })
+        setScale({x:value, y:value});
+          updateCanvas()
+        return;
+  }
   const newScale = { ...scale, [key]: value }
   setScale(newScale)
-
+ 
   if (key === 'x') {
     activeObject.set({ scaleX: value })
   } else {
@@ -249,6 +265,9 @@ const handleBackgroundColor = (e:string)=>{
     updateCanvas();
   }
 }
+ const handleScaleDimensionBoth = (value: number[]) => {
+    handleDimensionChange("both", Math.round(value[0]))
+  }
 
   if (!canvas) return null
 
@@ -290,7 +309,8 @@ const handleBackgroundColor = (e:string)=>{
   />
 </div>
 {/* //WIDTH HEIGHT */}
-      <div className='flex items-center justify-between px-2 gap-4'>
+      <div className='flex flex-col pb-5 border-b'>
+        <div className='flex items-end pb-2 justify-between px-2 gap-4'>
         <div className='flex flex-col gap-1'>
           <label className='text-xs'>Width</label>
           <Input
@@ -300,6 +320,17 @@ const handleBackgroundColor = (e:string)=>{
             onChange={(e) => handleDimensionChange('width', Number(e.target.value))}
           />
         </div>
+          <Button
+    size={'icon'}
+    variant={'outline'}
+      onClick={() => setDimensionsLocked(!dimensionsLocked)}
+      className={`p-2 rounded-md border hover:bg-muted-foreground/10 ${
+       dimensionsLocked ? 'text-green-500' : 'text-muted-foreground'
+      }`}
+      title='Lock radii together'
+    >
+      {dimensionsLocked ? <LockIcon/>: <LockOpen/>}
+    </Button>
         <div className='flex flex-col gap-1'>
           <label className='text-xs'>Height</label>
           <Input
@@ -310,9 +341,25 @@ const handleBackgroundColor = (e:string)=>{
           />
         </div>
       </div>
+      
+              <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <label className="text-xs text-nowrap">Scale Both</label>
+        </div>
+        <Slider
+          className="w-full max-w-sm"
+          min={0}
+          max={canvas.width+(canvas.height-canvas.width>0 ? canvas.height-canvas.width: 0)}
+          step={1}
+          defaultValue={[dimensions.width||0]}
+          onValueChange={handleScaleDimensionBoth}
+        />
+      </div>
+
+      </div>
     {/**PADDING */}
     {activeObject?.type === 'i-text' && (
-  <div className='flex items-center justify-between px-2'>
+  <div className='flex items-center justify-between border-b pb-5 px-2'>
     <p className='text-sm'>Padding</p>
     <Input
       type='number'
@@ -325,7 +372,7 @@ const handleBackgroundColor = (e:string)=>{
 )}
 
       {/* //ROTATION */}
-      <div className='flex items-center justify-between px-2'>
+      <div className='flex items-center justify-between px-2 border-b pb-5'>
   <p className='text-sm'>Rotate</p>
   <div className='flex gap-2 items-center'>
     <Slider
@@ -345,9 +392,9 @@ const handleBackgroundColor = (e:string)=>{
   </div>
 </div>
       {/* //SCALE*/}
-<div className='flex flex-col gap-2 px-2'>
+<div className='flex flex-col gap-2 px-2 border-b pb-5'>
   <p className='text-sm font-medium'>Scale</p>
-  <div className='flex items-center justify-between gap-4'>
+  <div className='flex items-end justify-between gap-4'>
     <div className='flex flex-col'>
       <label className='text-xs'>Scale X</label>
       <Input
@@ -359,6 +406,17 @@ const handleBackgroundColor = (e:string)=>{
         className='w-20'
       />
     </div>
+     <Button
+    size={'icon'}
+    variant={'outline'}
+      onClick={() => setScaleLocked(!ScaleLocked)}
+      className={`p-2 rounded-md border hover:bg-muted-foreground/10 ${
+        ScaleLocked ? 'text-green-500' : 'text-muted-foreground'
+      }`}
+      title='Lock radii together'
+    >
+      {ScaleLocked? <LockIcon/>: <LockOpen/>}
+    </Button>
     <div className='flex flex-col'>
       <label className='text-xs'>Scale Y</label>
       <Input
@@ -371,9 +429,18 @@ const handleBackgroundColor = (e:string)=>{
       />
     </div>
   </div>
+   <Slider min={0}  
+   max={1000}
+  value={[scale.x*100]}
+  step={1}
+  onValueChange={(e)=>{
+     handleScaleChange('x', Number(e[0])/100)
+     handleScaleChange('y', Number(e[0])/100)
+  }}
+  />
 </div>
       {/* //POSITION*/}
-<div className='flex flex-col gap-2 px-2'>
+<div className='flex flex-col gap-2 px-2 border-b pb-5'>
   <p className='text-sm font-medium'>Position</p>
   <div className='flex items-center justify-between gap-4'>
     <div className='flex flex-col'>
@@ -399,6 +466,7 @@ const handleBackgroundColor = (e:string)=>{
       {/* //RADIUS*/}
 
 {activeObject?.type === 'rect'  && (
+  <>
   <div className='flex items-end justify-between px-2 gap-2'>
     <div className='flex flex-col gap-1'>
       <label className='text-xs'>Radius X</label>
@@ -432,6 +500,15 @@ const handleBackgroundColor = (e:string)=>{
       />
     </div>
   </div>
+  <Slider min={0} max={50} 
+  value={[radius.rx]}
+  step={1}
+  onValueChange={(e)=>{
+    handleRadiusChange('ry', Number(e[0]));
+    handleRadiusChange('rx', Number(e[0]));
+  }}
+  />
+  </>
 )}
        
       {/* //DELETE */}

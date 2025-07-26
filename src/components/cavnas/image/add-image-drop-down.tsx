@@ -31,8 +31,8 @@ const AddImageDropDown = () => {
         const canvasImage = await FabricImage.fromURL(url,{
           crossOrigin:'anonymous'
         });
-      const originalWidth = canvasImage.width!;
-        const scale = canvas.width / originalWidth;
+      // const originalWidth = canvasImage.width!;
+        // const scale = canvas.width / originalWidth;
         canvasImage.set({
             scaleX:0.5,
             scaleY:0.5,

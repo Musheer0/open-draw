@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 "use server"
 const access_key = process.env.UNSPLASH_ACCESS_KEY
 export const SearchUnsplashImage = async(query:string):Promise<string[]>=>{
@@ -9,9 +10,9 @@ export const SearchUnsplashImage = async(query:string):Promise<string[]>=>{
     });
     if(request.ok) {
         const response = await request.json();
-        const results = response?.results as any[]
+        const results = response?.results 
         console.log(results.length)
-        const urls = results.map((r, )=>{
+        const urls = results.map((r:any, )=>{
             return r.cover_photo.urls.regular
 
         })
