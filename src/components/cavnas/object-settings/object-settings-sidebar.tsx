@@ -29,13 +29,13 @@ const ObjectSettingsSideBar = () => {
 if(canvas )
     return (
     <div className={cn(
-        ' h-full bg-background  relative rounded-2xl z-50 transition-all duration-500 ease-in-out ',
+        ' h-full bg-background  relative rounded-2xl z-50  transition-all duration-500 ease-in-out ',
         activeObject ? 'w-[300px] ': "pointer-events-none w-[300px]"
     )}>
        {!activeObject && <p className='text-sm text-muted-foreground absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>No Active Selection</p>}
         <div
         className={cn(
-        ' h-full w-full transition-all thin-scrollbar overflow-y-auto  duration-500 ease-in-out p-2 overflow-hidden',
+        ' h-full w-full transition-all thin-scrollbar  overflow-y-auto  duration-500 ease-in-out p-2 overflow-hidden',
         activeObject ? 'opacity-100':"opacity-0"
     )}
         >

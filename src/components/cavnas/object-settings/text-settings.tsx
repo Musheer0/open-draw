@@ -273,7 +273,7 @@ const TextSettings = () => {
     }
   }
  
-  if (canvas && activeObject )
+  if (canvas )
     return (
  <>
   {/* === Style Icons === */}
@@ -298,7 +298,7 @@ const TextSettings = () => {
    <div className={
     cn(
         "fixed z-50 top-[4.5rem] transition-all duration-500 ease-in-out left-1/2 -translate-x-1/2 bg-background/70 border rounded-2xl px-4 py-2 flex items-center gap-6 w-fit",
-        isFont ? " top-[4.5rem] opacity-100":'pointer-events-none opacity-0 top-0'
+        isFont ? " top-[4rem] opacity-100":'pointer-events-none opacity-0 top-0'
     )
    }>
   
@@ -311,7 +311,7 @@ const TextSettings = () => {
       min={0}
       value={fontSize}
       onChange={(e) => HandleFontSizeChange(e.target.value)}
-      className="w-20 text-sm"
+      className="w-[3.3rem] pr-0 text-xs"
     />
   </div>
    {/*===Line Height === */}
@@ -323,7 +323,7 @@ const TextSettings = () => {
       max={5}
       value={lineHeight}
       onChange={(e) => HandlelineHeight(Number(e.target.value))}
-      className="w-20 text-sm"
+      className="w-[3.9rem] pr-0 text-sm"
     />
   </div>
      {/*===Letter Spacing === */}
@@ -335,7 +335,7 @@ const TextSettings = () => {
       max={3000}
       value={charSpace}
       onChange={(e) => HandleLetterSpacing(Number(e.target.value))}
-      className="w-20 text-sm"
+      className="w-[3rem] pr-0 text-sm"
     />
   </div>
   {/* === Font Family === */}
@@ -373,7 +373,7 @@ const TextSettings = () => {
   <div className="flex items-center gap-2">
     <label className="text-sm whitespace-nowrap">Font Weight:</label>
     <Select onValueChange={HandleFontWeightChange}>
-      <SelectTrigger className="min-w-[140px]">
+      <SelectTrigger className="w-fit">
         <SelectValue placeholder={fontWeight} />
       </SelectTrigger>
       <SelectContent>

@@ -231,6 +231,12 @@ body {
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: rgba(100, 100, 100, 0.3) transparent;
 }
+.high-scroll{
+    scrollbar-width: thin; /* Firefox */
+
+    scrollbar-color: yellow !important;
+
+}
 .chrome-picker{
   box-shadow: none !important;
   padding: 0.5rem  !important;

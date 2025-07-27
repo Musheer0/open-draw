@@ -342,6 +342,7 @@ const handleBackgroundColor = (e:string)=>{
         </div>
       </div>
       
+      {dimensionsLocked &&
               <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col gap-1">
           <label className="text-xs text-nowrap">Scale Both</label>
@@ -355,6 +356,7 @@ const handleBackgroundColor = (e:string)=>{
           onValueChange={handleScaleDimensionBoth}
         />
       </div>
+      }
 
       </div>
     {/**PADDING */}
@@ -429,6 +431,7 @@ const handleBackgroundColor = (e:string)=>{
       />
     </div>
   </div>
+  {ScaleLocked &&
    <Slider min={0}  
    max={1000}
   value={[scale.x*100]}
@@ -438,6 +441,7 @@ const handleBackgroundColor = (e:string)=>{
      handleScaleChange('y', Number(e[0])/100)
   }}
   />
+  }
 </div>
       {/* //POSITION*/}
 <div className='flex flex-col gap-2 px-2 border-b pb-5'>
@@ -500,7 +504,8 @@ const handleBackgroundColor = (e:string)=>{
       />
     </div>
   </div>
-  <Slider min={0} max={50} 
+ {radiusLocked &&
+  <Slider min={0} max={200} 
   value={[radius.rx]}
   step={1}
   onValueChange={(e)=>{
@@ -508,6 +513,7 @@ const handleBackgroundColor = (e:string)=>{
     handleRadiusChange('rx', Number(e[0]));
   }}
   />
+ }
   </>
 )}
        

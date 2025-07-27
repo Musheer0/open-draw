@@ -152,7 +152,7 @@ useEffect(()=>{
 },[MoveFunction])
     
   return (
-    <div className='h-full py-20.5 pt-[7rem] thin-scrollbar items-cent justify-center  p-2 flex-1 flex   overflow-auto'>
+    <div className='h-full py-20.5 pt-[7rem] thin-scrollbar high-scroll items-cent justify-center  p-2 flex-1 flex   overflow-auto'>
         <canvas ref={canvasRef}  className='mx-auto'/>
     </div>
   )
