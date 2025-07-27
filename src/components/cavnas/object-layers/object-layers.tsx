@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { useCanvas } from "../canvas-provider"
 import { Button } from "@/components/ui/button"
-import { LockIcon, LockOpenIcon, Trash2Icon } from "lucide-react" 
+import { LockIcon, LockOpenIcon, ScissorsIcon, Trash2Icon } from "lucide-react" 
 import {  BringToFront, EyeIcon, EyeOffIcon, MoreHorizontalIcon, MoveDownIcon, MoveUpIcon, SendToBack } from "lucide-react"
 import { cn } from "@/lib/utils"
     import {
@@ -17,6 +17,7 @@ const ObjectLayers = () => {
   const { canvas } = useCanvas()
   const [layers, setLayers] = useState<any[]>([])
   const [activeObj, setActiveObj] = useState<any | null>(null);
+  const [activeObjMulti,setActiveObjMulti] = useState<any[]>([])
 //   useEffect(()=>{
 //     const layerswithId = layers.map((l)=>{
 //         if(!l?.id) {
@@ -33,6 +34,7 @@ const ObjectLayers = () => {
     const updateLayers = () => {
       setLayers([...canvas.getObjects()])
       setActiveObj(canvas.getActiveObject())
+      setActiveObjMulti([...canvas.getActiveObjects()]);
     }
 
     canvas.on("object:added", updateLayers)
@@ -75,6 +77,7 @@ const ObjectLayers = () => {
   const bringForward =(e:any)=>{
     if(canvas){
         canvas.bringObjectForward(e);
+        canvas.discardActiveObject()
     }
 }
     const MoveToTop =(e:any)=>{
@@ -90,7 +93,8 @@ const ObjectLayers = () => {
   const bringBackward = (e:any)=>{
     if(canvas){
         canvas.sendObjectBackwards(e)
-    }
+      canvas.discardActiveObject()
+      }
   }
 
  const layer_actions = [
@@ -125,7 +129,10 @@ const ObjectLayers = () => {
 
   return (
     <div className="flex flex-col   gap-2">
-      <p className="p-2  sticky bg-background top-0">Layers ({layers.length})</p>
+     <div className="header p-2  sticky bg-background top-0 flex items-center justify-between">
+       <p className="">Layers ({layers.length})</p>
+   
+     </div>
       {[...layers]
         .slice()
         .reverse()
@@ -135,7 +142,7 @@ const ObjectLayers = () => {
             onClick={() => handleClick(obj)}
             className={cn(
               "p-3 border flex relative items-center overflow-hidden justify-between gap-2 rounded-xl hover:bg-muted/20 cursor-pointer transition",
-              activeObj === obj && "bg-primary/10 border-primary"
+             ( activeObj === obj || activeObjMulti.includes(obj)) && "bg-primary/10 border-primary"
             )}
           >
                   {!obj.evented ? <><div
@@ -166,7 +173,7 @@ const ObjectLayers = () => {
   <PopoverContent className="flex flex-col p-2 gap-1 min-w-[180px]">
     {/* Visibility Toggle */}
     <Button
-      onClick={(e) => {
+      onClick={() => {
         toggleVisibility(obj)
       }}
       size="sm"

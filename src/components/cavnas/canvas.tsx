@@ -70,11 +70,13 @@ const Canvas = () => {
         if(!canvas) return 
       if(e.key==='Delete'){
         e.preventDefault();
-          const active = canvas.getActiveObject();
-          if(active){
-            canvas.remove(active);
+          const active = canvas.getActiveObjects();
+          if(active.length!==0){
+             active.forEach((a)=>{
+                canvas.remove(a);
+                canvas.discardActiveObject()
           canvas.renderAll()
-          
+             })
         }
       }
       if(e.key==='Escape'){

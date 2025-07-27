@@ -1,5 +1,5 @@
 import { InsertOptionsSlug } from "@/canvas-options";
-import { Canvas, Circle, Ellipse, IText, Line,  Polygon, Rect, Triangle } from "fabric";
+import { Canvas, Circle, Ellipse, FabricImage, FabricObject, IText, Line,  Polygon, Rect, Shadow, Triangle } from "fabric";
 export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
     
     if(canvas){
@@ -118,16 +118,18 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
 export const  DuplicateObject = async(canvas:Canvas|null)=>{
     
     if(canvas){
-        const active = canvas.getActiveObject()
-    if (!active) return
-       const cloned =await active.clone()
+        const active = canvas.getActiveObjects()
+    if (active.length>1) return
+      for (const obj of active){
+          const cloned =await obj.clone()
         cloned.set({
             top:cloned.top+10,
             left:cloned.left+10
         })
       canvas.add(cloned)
-      canvas.setActiveObject(cloned)
+
       canvas.requestRenderAll()
+      }
     // active.clone((cloned) => {
     //   // Offset the clone so it's not stacked on top
     //   cloned.set({
@@ -141,4 +143,20 @@ export const  DuplicateObject = async(canvas:Canvas|null)=>{
     // })
 
     }
+}
+
+export const AddShadow = (canvas:Canvas, obj:FabricObject)=>{
+  if(obj?.shadow){
+    obj.set("shadow", null)
+    canvas.requestRenderAll()
+      return
+  }
+  obj.set('shadow', new Shadow({
+ color: 'rgba(0,0,0,0.5)', 
+  blur: 10,                 
+  offsetX: 5,               
+  offsetY: 5,             
+  }))
+  
+      canvas.requestRenderAll()
 }

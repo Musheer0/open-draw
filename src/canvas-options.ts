@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import AddImageDropDown from "./components/cavnas/image/add-image-drop-down";
 import BackgroundSettings from "./components/cavnas/background-settings/background-settings";
+import Settings from "./components/cavnas/settings/settings";
 
 
 export const SingleCickInsertOptions = [
@@ -90,7 +91,7 @@ export const InsertOptions = [
     name: 'Settings',
     icon: SettingsIcon,
     slug: 'sg' as InsertOptionsSlug,
-        component:AddImageDropDown
+        component:Settings  
 
   },
 ]

@@ -3,12 +3,14 @@
 import React, {  useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
 import { ChromePicker } from 'react-color'
-import { FabricObject, Rect } from 'fabric'
+import { Circle, FabricObject, Rect, Shadow } from 'fabric'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
 import { Button } from '@/components/ui/button'
 import { LockIcon, LockOpen, Trash2Icon } from 'lucide-react'
+import { Switch } from "@/components/ui/switch"
+import { AddShadow } from '../utils'
 
 const ColorPicker = ({ title, onChange, value }: { title: string, onChange: (e: string) => void, value: string }) => {
   return (
@@ -41,15 +43,23 @@ const [scale, setScale] = useState({ x: 1, y: 1 })
 const [position, setPosition] = useState({ x: 0, y: 0 })
 const [padding, setPadding] = useState(0)
 const [dimensionsLocked, setDimensionsLocked] = useState(false)
-const [radius ,setRadius] = useState({
+const [shadowEnabled,setShadowEnable] = useState(false)
+const [borderRadius ,setBorderRadius] = useState({
     rx: 0,
     ry:  0,
   });
-  const [radiusLocked, setRadiusLocked] = useState(true);
+  const [radius ,setRadius]  =useState(0)
+  const [borderRadiusLocked, setBorderRadiusLocked] = useState(true);
   const [ScaleLocked, setScaleLocked] = useState(true);
-
+  const [shadowSettings ,setShadowSettings] = useState({
+ color: 'rgba(0,0,0,0.5)', 
+  blur: 10,                 
+  offsetX: 5,               
+  offsetY: 5,             
+  })
 const UpdateStatus = ()=>{
       if (activeObject instanceof FabricObject) {
+        setShadowEnable(!!activeObject.shadow)
       setFill(activeObject.fill as string || '#ffffff')
       setBorder({
         width: Number(activeObject.strokeWidth) || 1,
@@ -68,10 +78,16 @@ setPosition({
 if (activeObject.type === 'i-text') {
   setPadding(activeObject.padding || 0)
 }
-
+if(activeObject instanceof Circle){
+  setRadius(activeObject.radius);
+activeObject.set({
+  originX: 'center',
+  originY: 'center'
+});
+}
 setBackground(activeObject.backgroundColor)
 if (activeObject instanceof Rect ) {
-  setRadius({
+  setBorderRadius({
     rx: activeObject?.rx || 0,
     ry: activeObject?.ry || 0,
   })
@@ -115,7 +131,12 @@ useEffect(()=>{
      }
      
   }, [activeObject,canvas])
-
+useEffect(()=>{
+  if(canvas && activeObject){
+    activeObject.set('shadow', new Shadow(shadowSettings));
+    canvas.requestRenderAll()
+  }
+},[shadowSettings])
   const updateCanvas = () => {
     canvas?.renderAll()
     canvas?.requestRenderAll()
@@ -240,22 +261,29 @@ const handlePositionChange = (key: 'x' | 'y', value: number) => {
 
   updateCanvas()
 }
-const handleRadiusChange = (key: 'rx' | 'ry', value: number) => {
+const handleBorderRadiusChange = (key: 'rx' | 'ry', value: number) => {
   if (!activeObject || activeObject.type !== 'rect' || !canvas) return;
 
-  let updated = { ...radius, [key]: value };
+  let updated = { ...borderRadius, [key]: value };
 
-  if (radiusLocked) {
+  if (borderRadiusLocked) {
     // When locked, update both
     updated = { rx: value, ry: value };
   }
 
-  setRadius(updated);
+  setBorderRadius(updated);
   activeObject.set(updated);
   activeObject.setCoords();
   canvas.requestRenderAll();
 };
-
+const handleRadiusChange = (e:number)=>{
+  if(canvas && activeObject instanceof Circle){
+    activeObject.set({
+      radius:e
+    });
+    updateCanvas()
+  }
+}
 const handleBackgroundColor = (e:string)=>{
   if(canvas && activeObject){
     setBackground(e);
@@ -309,6 +337,7 @@ const handleBackgroundColor = (e:string)=>{
   />
 </div>
 {/* //WIDTH HEIGHT */}
+     {activeObject?.type!=='circle' &&
       <div className='flex flex-col pb-5 border-b'>
         <div className='flex items-end pb-2 justify-between px-2 gap-4'>
         <div className='flex flex-col gap-1'>
@@ -359,6 +388,7 @@ const handleBackgroundColor = (e:string)=>{
       }
 
       </div>
+     }
     {/**PADDING */}
     {activeObject?.type === 'i-text' && (
   <div className='flex items-center justify-between border-b pb-5 px-2'>
@@ -394,6 +424,7 @@ const handleBackgroundColor = (e:string)=>{
   </div>
 </div>
       {/* //SCALE*/}
+{activeObject?.type!=='circle' &&
 <div className='flex flex-col gap-2 px-2 border-b pb-5'>
   <p className='text-sm font-medium'>Scale</p>
   <div className='flex items-end justify-between gap-4'>
@@ -443,6 +474,7 @@ const handleBackgroundColor = (e:string)=>{
   />
   }
 </div>
+}
       {/* //POSITION*/}
 <div className='flex flex-col gap-2 px-2 border-b pb-5'>
   <p className='text-sm font-medium'>Position</p>
@@ -467,8 +499,7 @@ const handleBackgroundColor = (e:string)=>{
     </div>
   </div>
 </div>
-      {/* //RADIUS*/}
-
+      {/* //BORDER RADIUS*/}
 {activeObject?.type === 'rect'  && (
   <>
   <div className='flex items-end justify-between px-2 gap-2'>
@@ -477,46 +508,156 @@ const handleBackgroundColor = (e:string)=>{
       <Input
         type='number'
         className='w-20'
-        value={radius.rx}
+        value={borderRadius.rx}
         min={0}
-        onChange={(e) => handleRadiusChange('rx', Number(e.target.value))}
+        onChange={(e) => handleBorderRadiusChange('rx', Number(e.target.value))}
       />
     </div>
     <Button
     size={'icon'}
     variant={'outline'}
-      onClick={() => setRadiusLocked(!radiusLocked)}
+      onClick={() => setBorderRadiusLocked(!borderRadiusLocked)}
       className={`p-2 rounded-md border hover:bg-muted-foreground/10 ${
-        radiusLocked ? 'text-green-500' : 'text-muted-foreground'
+        borderRadiusLocked ? 'text-green-500' : 'text-muted-foreground'
       }`}
       title='Lock radii together'
     >
-      {radiusLocked ? <LockIcon/>: <LockOpen/>}
+      {borderRadiusLocked ? <LockIcon/>: <LockOpen/>}
     </Button>
     <div className='flex flex-col gap-1'>
       <label className='text-xs'>Radius Y</label>
       <Input
         type='number'
         className='w-20'
-        value={radius.ry}
+        value={borderRadius.ry}
         min={0}
-        onChange={(e) => handleRadiusChange('ry', Number(e.target.value))}
+        onChange={(e) => handleBorderRadiusChange('ry', Number(e.target.value))}
       />
     </div>
   </div>
- {radiusLocked &&
+ {borderRadiusLocked &&
   <Slider min={0} max={200} 
-  value={[radius.rx]}
+  value={[borderRadius.rx]}
   step={1}
   onValueChange={(e)=>{
-    handleRadiusChange('ry', Number(e[0]));
-    handleRadiusChange('rx', Number(e[0]));
+    handleBorderRadiusChange('ry', Number(e[0]));
+    handleBorderRadiusChange('rx', Number(e[0]));
   }}
   />
  }
   </>
 )}
-       
+       {/* SHADOW */}
+       <div className="flex items-center py-5 border-t border-b space-x-2">
+      <Switch
+      checked={shadowEnabled}
+      onClick={()=>{
+        setShadowEnable(!shadowEnabled)
+        AddShadow(canvas,activeObject)
+      }}
+      />
+      <p className='text-sm font-semibold'>Add Shadow</p>
+    </div>
+    {shadowEnabled &&
+      <div className='flex flex-col border-b pb-5'>
+              <p className='text-sm font-semibold'>Shadow Settings</p>
+              <ColorPicker title='Shadow Color' value={shadowSettings.color} 
+              onChange={(e)=>{
+                if(!activeObject && !canvas) return
+                const new_state ={
+                  ...shadowSettings,
+                  color:e
+                }
+                setShadowSettings(new_state);
+                
+              }}
+              />
+              <div className='flex flex-col     py-3 gap-1'>
+              <p className='text-sm font-semibold'>Blur</p>
+              <div className='flex items-center px-1 gap-1'>
+                 <Input
+                 className='pr-0 w-[3.5rem]'
+                  value={shadowSettings.blur}
+                          type="number"
+ 
+                  onChange={(e)=>{
+                    setShadowSettings({
+                      ...shadowSettings,
+                      blur:Number(e.target.value)
+                    })
+                  }}
+                  />
+                <Slider
+                className='flex-1'
+                  min={0}
+                 max={100}
+                 step={1}
+                 value={[shadowSettings.blur]}
+                 onValueChange={(e)=>{
+                   const new_state ={
+                  ...shadowSettings,
+                  blur:e[0]
+                }
+                setShadowSettings(new_state);
+                 }}
+                />
+              </div>
+              </div>
+              <div className='flex items-center gap-4'>
+                <div className='flex flex-col gap-2'>
+                  <p className='text-xs font-semibold'>Offet X</p>
+                  <Input
+                  value={shadowSettings.offsetX}
+                          type="number"
+ 
+                  onChange={(e)=>{
+                    setShadowSettings({
+                      ...shadowSettings,
+                      offsetX:Number(e.target.value)
+                    })
+                  }}
+                  />
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <p className='text-xs font-semibold'>Offet Y</p>
+                  <Input
+                  value={shadowSettings.offsetY}
+                          type="number"
+                  onChange={(e)=>{
+                    setShadowSettings({
+                      ...shadowSettings,
+                      offsetY:Number(e.target.value)
+                    })
+                  }}
+                  />
+                </div>
+              </div>
+      </div>
+    
+    }
+      {/* RADIUS CIRCLE */}
+
+      <div className='flex flex-col gap-1 pb-4 border-b' >
+        <div className='flex items-center gap-2 justify-between'>
+        <p className='text-sm font-semibold text-nowrap'>radius :</p>
+           <Input
+        type="number"
+        min={0}
+        step={1}
+        value={radius}
+        onChange={(e) => handleRadiusChange(Number(e.target.value))}
+        className=''
+      />
+        </div>
+         <Slider min={0}  
+   max={1000}
+  value={[radius]}
+  step={1}
+  onValueChange={(e)=>{
+     handleRadiusChange(e[0])
+  }}
+  />
+      </div>
       {/* //DELETE */}
         <div className='flex items-center justify-between px-2'>
   <p className='text-sm'>Romove Object</p>
