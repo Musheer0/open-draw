@@ -28,8 +28,8 @@ const Canvas = () => {
             const h = Number(searchParams.get('h'))|| 500
             // const scale = window.devicePixelRatio|1
             const initialize = new FCanvas(canvasRef.current,{
-                width:w/2,
-                height:h/2,
+                width:w/2.5,
+                height:h/2.5,
                 backgroundColor: '#ffff',
                 preserveObjectStacking:true
             });
@@ -83,6 +83,7 @@ const Canvas = () => {
  const activeObject = canvas.getActiveObject();
     
     if (activeObject) {
+      
       canvas.discardActiveObject(); 
       canvas.requestRenderAll(); 
     }      }
@@ -154,7 +155,8 @@ useEffect(()=>{
 },[MoveFunction])
     
   return (
-    <div className='h-full py-20.5 pt-[7rem] thin-scrollbar high-scroll items-cent justify-center  p-2 flex-1 flex   overflow-auto'>
+    <div className='h-full p-20.5 mt-6.5  thin-scrollbar high-scroll items-cent justify-center  p-2 flex-1 flex   overflow-auto'>
+      
         <canvas ref={canvasRef}  className='mx-auto'/>
     </div>
   )

@@ -7,11 +7,13 @@ import CanvasToolBar from './canvas-tool-bar'
 import ObjectSettingsSideBar from './object-settings/object-settings-sidebar'
 import TextSettings from './object-settings/text-settings'
 import ObjectLayersSideBar from './object-layers/object-layers-sidebar'
+import { SnapToCenter } from './helpers/snapping-helpers'
 
 const CanvasView = () => {
   return (
     <CanvasContextProvider>
         <main className='w-full p-2  transparent h-screen overflow-hidden hidden lg:flex'>
+          <SnapToCenter/>
         <CanvasToolBar/>
         <TextSettings/>
         <ObjectLayersSideBar/>

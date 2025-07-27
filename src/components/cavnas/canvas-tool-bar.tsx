@@ -12,7 +12,6 @@ import { useCanvas } from './canvas-provider'
 import { AddShape } from './utils'
 import { ModeToggle } from '../ui/mode-toggle'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu'
-import History from './history/history'
 const CanvasToolBar = () => {
     const {canvas} = useCanvas()
   return (
@@ -50,7 +49,6 @@ const CanvasToolBar = () => {
                  </DropdownMenu>
             )
         })}
-        <History/>
         
         <ModeToggle/>
        <ExportCanvas title='test canvas'/>
