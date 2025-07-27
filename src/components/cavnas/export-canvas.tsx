@@ -13,7 +13,7 @@ const ExportCanvas = ({title}:{title:string}) => {
     const dataUrl = canvas.toDataURL({
       format,
       quality: 1,
-      multiplier: 2.5,
+      multiplier: 2,
       width:canvas.width,
       height:canvas.height
     });
