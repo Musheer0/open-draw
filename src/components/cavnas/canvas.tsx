@@ -9,15 +9,27 @@ const Canvas = () => {
     const canvasRef = useRef<HTMLCanvasElement|null>(null);
     const [canvas ,setCanvas] = useState<FCanvas|null>(null);
     const searchParams = useSearchParams();
-    const {setCanvas:setCanvasContext,canvas:canvasContext} = useCanvas()
+    const {setCanvas:setCanvasContext,canvas:canvasContext} = useCanvas();
+    const HandleContextMenu = (e:MouseEvent)=>{
+      if(canvasRef.current && canvas && canvas.getActiveObject()){
+        const canva = canvasRef.current.getBoundingClientRect();
+        const activeObj = canvas.getActiveObject();
+        if(activeObj){
+          e.preventDefault()
+          const left = canva.left+activeObj?.left+activeObj.width;
+          const top = canva.top+activeObj.top;
+          alert(`${left}-${top}`)
+        }
+      }
+    }
     useEffect(()=>{
         if(!canvas && canvasRef.current){
             const w = Number(searchParams.get('w'))|| 500
             const h = Number(searchParams.get('h'))|| 500
             // const scale = window.devicePixelRatio|1
             const initialize = new FCanvas(canvasRef.current,{
-                width:w/2.5,
-                height:h/2.5,
+                width:w/2,
+                height:h/2,
                 backgroundColor: '#ffff',
                 preserveObjectStacking:true
             });
@@ -52,7 +64,7 @@ const Canvas = () => {
         window.removeEventListener("keydown",Duplicate)
       }
     });
-
+    
     //DELECT FUNCTION
      const Delete =async (e:KeyboardEvent)=>{
         if(!canvas) return 

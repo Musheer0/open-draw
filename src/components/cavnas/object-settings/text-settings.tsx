@@ -180,11 +180,14 @@ const TextSettings = () => {
     canvas?.renderAll()
     canvas?.requestRenderAll()
   }
-  const [fontSize ,setFontSize] = useState(0)
+  const [fontSize ,setFontSize] = useState(0);
+  const [lineHeight ,setLineHeight] = useState(1.16);
+  const [charSpace,setCharSpace] = useState(0)
   const isFont = canvas && activeObject && activeObject instanceof IText
   const handleSelection = () => {
     if (canvas) {
       setActiveObject(canvas.getActiveObject())
+      updateStatus()
     }
   }
   const updateStatus = ()=>{
@@ -192,7 +195,8 @@ const TextSettings = () => {
       const weight = activeObject.fontWeight;
       setFontWeight(weight.toString());
       const font_size = activeObject.fontSize;
-      setFontSize(font_size);      
+      setFontSize(font_size);  
+      setLineHeight(activeObject?.lineHeight)    
     }
   }
   useEffect(() => {
@@ -204,7 +208,7 @@ const TextSettings = () => {
     return () => {
       canvas.off("selection:created", handleSelection)
       canvas.off("selection:updated", handleSelection)
-      canvas.off("selection:cleared")
+      canvas.off("selection:cleared",handleSelection)
     }
   }, [canvas])
   useEffect(()=>{
@@ -249,7 +253,26 @@ const TextSettings = () => {
   const filteredFonts = fontFamilies.filter((f) =>
     f.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
-
+  const HandlelineHeight = (e:number)=>{
+    if(isFont){
+     activeObject.set({
+      lineHeight: e==0? 0.1:e
+     });
+     setLineHeight( e==0? 0.1:e)
+     updateCanvas();
+    }
+  }
+  const HandleLetterSpacing = (e:number)=>{
+    if(isFont){
+      const spacing = e<=3000? e: 3000;
+      activeObject.set({
+        charSpacing:spacing
+      });
+      setCharSpace(spacing);
+      updateCanvas();
+    }
+  }
+ 
   if (canvas && activeObject )
     return (
  <>
@@ -291,7 +314,30 @@ const TextSettings = () => {
       className="w-20 text-sm"
     />
   </div>
-
+   {/*===Line Height === */}
+   <div className="flex items-center gap-2">
+    <label className="text-sm whitespace-nowrap">Line Height:</label>
+    <Input
+      type="number"
+      min={0.1}
+      max={5}
+      value={lineHeight}
+      onChange={(e) => HandlelineHeight(Number(e.target.value))}
+      className="w-20 text-sm"
+    />
+  </div>
+     {/*===Letter Spacing === */}
+   <div className="flex items-center gap-2">
+    <label className="text-sm whitespace-nowrap">Letter Spacing:</label>
+    <Input
+      type="number"
+      min={-1000}
+      max={3000}
+      value={charSpace}
+      onChange={(e) => HandleLetterSpacing(Number(e.target.value))}
+      className="w-20 text-sm"
+    />
+  </div>
   {/* === Font Family === */}
   <div className="flex items-center gap-2">
     <Select defaultValue={activeObject?.fontFamily} onValueChange={HandleFontFamilyChange}>
