@@ -3,7 +3,7 @@ import { Canvas, Circle, Ellipse, FabricImage, FabricObject, IText, Line,  Polyg
 export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
     
     if(canvas){
-      const updatedCanvas = (obj:any)=>{
+      const updatedCanvas = (obj:FabricObject)=>{
           canvas.add(obj);
         canvas.setActiveObject(obj)
         canvas.renderAll()
