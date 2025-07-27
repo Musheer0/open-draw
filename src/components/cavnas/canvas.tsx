@@ -28,8 +28,8 @@ const Canvas = () => {
             const h = Number(searchParams.get('h'))|| 500
             // const scale = window.devicePixelRatio|1
             const initialize = new FCanvas(canvasRef.current,{
-                width:w/2.5,
-                height:h/2.5,
+                width:w/2,
+                height:h/2,
                 backgroundColor: '#ffff',
                 preserveObjectStacking:true
             });
