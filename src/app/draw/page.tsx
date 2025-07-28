@@ -1,35 +1,31 @@
-  'use server'
 import { auth } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
 
-type Props = {
-  searchParams?: { w?: string; h?: string }
-}
-
-const serverAction = async (w: number, h: number) => {
-  // Replace this with actual logic like image resize, whatever
-  console.log(`Width: ${w}, Height: ${h}`)
-}
-
-const Page = async ({ searchParams }: Props) => {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
   const user = await auth()
+  const resolvedParams = await searchParams
 
-  const width = parseInt(searchParams?.w || '0')
-  const height = parseInt(searchParams?.h || '0')
+  const wRaw = resolvedParams?.w
+  const hRaw = resolvedParams?.h
 
-  if (!isNaN(width) && !isNaN(height) && width > 0 && height > 0) {
-    // Trigger your server action
-    await serverAction(width, height)
+  const width = parseInt(Array.isArray(wRaw) ? wRaw[0] : wRaw || '0')
+  const height = parseInt(Array.isArray(hRaw) ? hRaw[0] : hRaw || '0')
+
+  if (width > 0 && height > 0) {
+    await doStuff(width, height)
   }
 
   return (
     <div>
-      <h1>User ID: {user.userId}</h1>
-      <p>
-        Got w: {width}, h: {height}
-      </p>
+      <p>User ID: {user.userId}</p>
+      <p>w: {width}, h: {height}</p>
     </div>
   )
 }
 
-export default Page
+async function doStuff(w: number, h: number) {
+  console.log('Triggered:', w, h)
+}

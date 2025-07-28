@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any*/
 import { FabricImage, FabricObject,filters } from "fabric";
 type commonProps ={
 activeObject:FabricObject, cb:()=>void

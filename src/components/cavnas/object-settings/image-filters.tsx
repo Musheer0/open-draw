@@ -95,7 +95,7 @@ if(obj)
       {keys.map((e,i)=>{
         const filter = objectFilter[e as keyof typeof objectFilter]
         const isNum =typeof filter==='number' 
-        const HandleChange = (k:string,v:any)=>{
+        const HandleChange = (k:string,v:number|boolean|string)=>{
           const fun= filtersMeta.find((f)=>f.name==k);
           if(!fun) return;
           fun.fun({activeObject:obj, cb:updateCanvas},v);

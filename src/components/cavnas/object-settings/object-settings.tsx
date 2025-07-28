@@ -1,4 +1,5 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable    @typescript-eslint/ban-ts-comment*/
 "use client"
 import React, {  useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
