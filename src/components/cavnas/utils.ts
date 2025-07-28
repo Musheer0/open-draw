@@ -106,8 +106,8 @@ export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
           fill: "black",
         }
       );
-        canvas.add(new_shape);
-        canvas.renderAll()
+           updatedCanvas(new_shape);
+
        }
        if(shape==="i-text"){
        const text = new IText('Your Text Here');

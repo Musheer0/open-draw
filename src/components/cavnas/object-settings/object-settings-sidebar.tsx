@@ -16,7 +16,10 @@ const ObjectSettingsSideBar = () => {
     if(!canvas) return
     canvas.on('selection:created', handleSelection);
   canvas.on('selection:updated', handleSelection);
-  canvas.on('selection:cleared', () => setActiveObject(null)); // user deselected
+  canvas.on('selection:cleared', ()=>{
+    setActiveObject(null)
+    canvas.discardActiveObject()
+  }); // user deselected
 
 
 
@@ -26,13 +29,12 @@ const ObjectSettingsSideBar = () => {
     canvas.off('selection:cleared');
   };
     },[canvas])
-if(canvas )
+if(canvas)
     return (
     <div className={cn(
-        ' h-full bg-background  relative rounded-2xl z-50  transition-all duration-500 ease-in-out ',
-        activeObject ? 'w-[300px] ': "pointer-events-none w-[300px]"
+        ' h-full bg-background  relative rounded-2xl border z-50  transition-all duration-500 ease-in-out ',
+        activeObject ? 'w-[300px] ': "pointer-events-none w-[200px] opacity-0 scale-95"
     )}>
-       {!activeObject && <p className='text-sm text-muted-foreground absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>No Active Selection</p>}
         <div
         className={cn(
         ' h-full w-full transition-all thin-scrollbar  overflow-y-auto  duration-500 ease-in-out p-2 overflow-hidden',

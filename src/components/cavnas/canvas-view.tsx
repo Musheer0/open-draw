@@ -10,13 +10,14 @@ import ObjectLayersSideBar from './object-layers/object-layers-sidebar'
 import { SnapToCenter } from './helpers/snapping-helpers'
 import AssetsManegement from '../images/assests-manager'
 import {AssetManagerProvider} from '@/components/images/assets-manager-provider'
-const CanvasView = () => {
+const CanvasView = ({id}:{id:string}) => {
   return (
     <CanvasContextProvider>
       <AssetManagerProvider>
         <main className='w-full p-2  transparent h-screen overflow-hidden hidden lg:flex'>
           <SnapToCenter/>
           <AssetsManegement/>
+        
         <CanvasToolBar/>
         <TextSettings/>
         <ObjectLayersSideBar/>

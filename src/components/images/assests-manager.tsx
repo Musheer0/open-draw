@@ -24,8 +24,8 @@ const AssetsManegement = () => {
       // const originalWidth = canvasImage.width!;
         // const scale = canvas.width / originalWidth;
         canvasImage.set({
-            scaleX:canvasImage.width<=100 ? 1:0.5,
-            scaleY:canvasImage.width<=100 ? 1:0.5,
+             scaleX:canvasImage.width<=100 ? 1:canvasImage.width>=canvas.width ? 0.2:0.4,
+            scaleY:canvasImage.width<=100 ? 1:canvasImage.width>=canvas.width ? 0.2:0.4,
             left:10,
             top:10,
             
@@ -94,8 +94,7 @@ if(isAssetManagerOpen && canvas )
           >
             <img src={img.url} className="w-fit rounded" alt="Image" />
             <p className="text-sm text-muted-foreground break-words line-clamp-3">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet
-              alias optio?
+              {img.name|| 'image'}
             </p>
           </div>
         ))}

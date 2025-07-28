@@ -55,6 +55,7 @@ const UploadButton = ({
     const data = await convex.mutation(api.images.uploadImage, {
       url: result.url,
       fileId: result.fileId,
+      name:file.name
     })
 
     return data

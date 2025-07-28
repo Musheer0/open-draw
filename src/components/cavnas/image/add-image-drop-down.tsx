@@ -38,8 +38,8 @@ const AddImageDropDown = () => {
       // const originalWidth = canvasImage.width!;
         // const scale = canvas.width / originalWidth;
         canvasImage.set({
-            scaleX:canvasImage.width<=100 ? 1:0.5,
-            scaleY:canvasImage.width<=100 ? 1:0.5,
+            scaleX:canvasImage.width<=100 ? 1:canvasImage.width>=canvas.width ? 0.2:0.4,
+            scaleY:canvasImage.width<=100 ? 1:canvasImage.width>=canvas.width ? 0.2:0.4,
             left:10,
             top:10,
             
@@ -84,7 +84,7 @@ const AddImageDropDown = () => {
                 }}
                 onFocus={()=>setShowHint(true)} onBlur={()=>setShowHint(false)} placeholder='Search Images '/>
                 {showHint && <p className='text-xs text-muted-foreground'>press enter to search</p>}
-                <div className="results masonry overflow-y-auto thin-scrollbar  gap-2 h-[400px] w-full py-2">
+                <div className="results flex flex-col  overflow-y-auto thin-scrollbar  gap-2 h-[400px] w-full py-2">
                     {isLoading && <p className='text-sm text-muted-foreground animate-pulse'>Looking for Images...</p>}
                     {results.map((e,i)=>{
                         return(

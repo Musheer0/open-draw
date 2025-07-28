@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react'
-import {Canvas as FCanvas} from 'fabric'
+import { Canvas as FCanvas} from 'fabric'
 import { useSearchParams } from 'next/navigation';
 import { useCanvas } from './canvas-provider';
 import { DuplicateObject } from './utils';
@@ -10,21 +10,10 @@ const Canvas = () => {
     const [canvas ,setCanvas] = useState<FCanvas|null>(null);
     const searchParams = useSearchParams();
     const {setCanvas:setCanvasContext,canvas:canvasContext} = useCanvas();
-    const HandleContextMenu = (e:MouseEvent)=>{
-      if(canvasRef.current && canvas && canvas.getActiveObject()){
-        const canva = canvasRef.current.getBoundingClientRect();
-        const activeObj = canvas.getActiveObject();
-        if(activeObj){
-          e.preventDefault()
-          const left = canva.left+activeObj?.left+activeObj.width;
-          const top = canva.top+activeObj.top;
-          alert(`${left}-${top}`)
-        }
-      }
-    }
+  
     useEffect(()=>{
         if(!canvas && canvasRef.current){
-            const w = Number(searchParams.get('w'))|| 500
+            const w = Number(searchParams.get('w'))||  500
             const h = Number(searchParams.get('h'))|| 500
             // const scale = window.devicePixelRatio|1
             const initialize = new FCanvas(canvasRef.current,{

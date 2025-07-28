@@ -10,10 +10,10 @@ export const SnapToCenter= ()=>{
   const [activeObject ,setActiveObject] = useState<FabricObject|undefined>(undefined);
   const snapobject = (key:"h"|"v"|"b")=>{
     if(!activeObject || !canvas) return
-    const w = canvas?.width/2;
+    const w =( canvas?.width/2);
     const h = canvas.height/2
-    const objeX = activeObject.width/2
-    const objeY = activeObject.height/2
+    const objeX = (activeObject.width/2)*activeObject.scaleX
+    const objeY = (activeObject.height/2)* activeObject.scaleY
     const centerX = w-objeX;
     const centerY = h-objeY
     if(key==='b'|| key==='h'){

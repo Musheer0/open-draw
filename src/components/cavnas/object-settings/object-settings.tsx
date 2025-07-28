@@ -4,33 +4,56 @@ import React, {  useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
 import { ChromePicker } from 'react-color'
 import { Circle, FabricObject, Rect, Shadow } from 'fabric'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
 import { Button } from '@/components/ui/button'
 import { LockIcon, LockOpen, Trash2Icon } from 'lucide-react'
 import { Switch } from "@/components/ui/switch"
 import { AddShadow } from '../utils'
+import ImageFilers from './image-filters'
+import ImageSettings from './image-settings'
+import { ColorPicker as MuiColorPicker } from 'mui-color'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+export const ColorPicker = ({
+  title,
+  onChange,
+  value,
+}: {
+  title: string
+  onChange: (e: string) => void
+  value: string
+}) => {
+  const [isOpen, setIsOpen] = useState(false)
 
-const ColorPicker = ({ title, onChange, value }: { title: string, onChange: (e: string) => void, value: string }) => {
   return (
-    <div className='flex items-center justify-between py-2 rounded-xl hover:bg-muted-foreground/5 px-2'>
-      <p className='text-sm'>{title}</p>
-      <Popover>
-        <PopoverTrigger>
-          <div
-            style={{ backgroundColor: value }}
-            className='w-10 h-5 rounded-md border cursor-pointer'
-          />
-        </PopoverTrigger>
-        <PopoverContent>
-          <ChromePicker color={value} onChange={(e) => onChange(e.hex)} />
-        </PopoverContent>
-      </Popover>
+    <div className="flex items-center justify-between py-2 px-2 rounded-xl hover:bg-muted/10 transition-colors">
+      <p className="text-sm font-medium">{title}</p>
+
+      <div className="">
+        <Popover>
+          <PopoverTrigger>
+            <div
+          className="w-10 h-5 rounded border border-black/30 cursor-pointer"
+          style={{ backgroundColor: value }}
+          onClick={() => setIsOpen(!isOpen)}
+        />
+          </PopoverTrigger>
+          <PopoverContent>
+               <MuiColorPicker
+              value={value}
+              
+              onChange={(color) => {
+                //@ts-ignore
+                onChange(color.css?.backgroundColor ?? '')
+              }}
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+      
     </div>
   )
 }
-
 const ObjectSettings = ({ activeObject }: { activeObject: any }) => {
   const { canvas } = useCanvas()
   const [fill, setFill] = useState('#fff');
@@ -48,6 +71,7 @@ const [borderRadius ,setBorderRadius] = useState({
     rx: 0,
     ry:  0,
   });
+  const [skew ,setSkew] =useState({x:0,y:0})
   const [radius ,setRadius]  =useState(0)
   const [borderRadiusLocked, setBorderRadiusLocked] = useState(true);
   const [ScaleLocked, setScaleLocked] = useState(true);
@@ -59,6 +83,10 @@ const [borderRadius ,setBorderRadius] = useState({
   })
 const UpdateStatus = ()=>{
       if (activeObject instanceof FabricObject) {
+        setSkew({
+          x:activeObject.skewX,
+          y:activeObject.skewY
+        });
         setShadowEnable(!!activeObject.shadow)
       setFill(activeObject.fill as string || '#ffffff')
       setBorder({
@@ -227,7 +255,20 @@ const handlePaddingChange = (value: number) => {
   }
 }
 
-
+const handleSkewChange =(dir:"x"|"y",val:number)=>{
+    if (!activeObject || !(activeObject instanceof FabricObject)) return
+    if(dir==='x') {
+      activeObject.set("skewX",val);
+    }
+    if(dir==='y'){
+      activeObject.set("skewY",val)
+    }
+    setSkew((prev)=>({
+      ...prev,
+      [dir]:val
+    }))
+    updateCanvas()
+}
 const handleScaleChange = (key: 'x' | 'y', value: number) => {
   if (!activeObject || !(activeObject instanceof FabricObject)) return
     if(ScaleLocked){
@@ -284,9 +325,9 @@ const handleRadiusChange = (e:number)=>{
     updateCanvas()
   }
 }
-const handleBackgroundColor = (e:string)=>{
+const handleBackgroundColor = (e:string|null)=>{
   if(canvas && activeObject){
-    setBackground(e);
+    setBackground(e||'transparent');
     activeObject.set({
       backgroundColor: e
     });
@@ -301,6 +342,7 @@ const handleBackgroundColor = (e:string)=>{
 
   return (
     <div className='flex flex-col pb-10 thin-scrollbar overflow-y-auto h-full flex-1 w-full gap-4 pt-5'>
+      {activeObject?.type==='image' && <ImageSettings obj={activeObject}/>}
       <ColorPicker title='Background Color' value={Background} onChange={handleBackgroundColor} />
       <ColorPicker title='Fill Color' value={fill} onChange={handleFillColorChange} />
       <ColorPicker title='Border Color' value={border.color} onChange={handleBorderColorChange} />
@@ -336,6 +378,31 @@ const handleBackgroundColor = (e:string)=>{
     onValueChange={(val) => handleOpacityChange(val[0])}
   />
 </div>
+      {/* RADIUS CIRCLE */}
+{activeObject?.type ==='circle' &&
+
+      <div className='flex flex-col gap-1 pb-4 border-b' >
+        <div className='flex items-center gap-2 justify-between'>
+        <p className='text-sm font-semibold text-nowrap'>radius :</p>
+           <Input
+        type="number"
+        min={0}
+        step={1}
+        value={radius}
+        onChange={(e) => handleRadiusChange(Number(e.target.value))}
+        className=''
+      />
+        </div>
+         <Slider min={0}  
+   max={1000}
+  value={[radius]}
+  step={1}
+  onValueChange={(e)=>{
+     handleRadiusChange(e[0])
+  }}
+  />
+      </div>
+}
 {/* //WIDTH HEIGHT */}
      {activeObject?.type!=='circle' &&
       <div className='flex flex-col pb-5 border-b'>
@@ -389,6 +456,32 @@ const handleBackgroundColor = (e:string)=>{
 
       </div>
      }
+       <div className='flex flex-col pb-5 border-b'>
+        <div className='flex items-end pb-2 justify-between px-2 gap-4'>
+        <div className='flex flex-col gap-1'>
+          <label className='text-xs'>Skew X</label>
+          <Input
+            type="number"
+            className='w-20'
+            value={Math.round(skew.x)}
+            onChange={(e) =>handleSkewChange("x",Number(e.target.value))}
+          />
+        </div>
+       
+        <div className='flex flex-col gap-1'>
+          <label className='text-xs'>Skew Y</label>
+          <Input
+            type="number"
+            className='w-20'
+            value={Math.round(skew.y)}
+            onChange={(e) => handleSkewChange("y",Number(e.target.value))}
+          />
+        </div>
+      </div>
+      
+      
+
+      </div>
     {/**PADDING */}
     {activeObject?.type === 'i-text' && (
   <div className='flex items-center justify-between border-b pb-5 px-2'>
@@ -635,29 +728,8 @@ const handleBackgroundColor = (e:string)=>{
       </div>
     
     }
-      {/* RADIUS CIRCLE */}
+    {activeObject?.type==='image' &&<ImageFilers obj={activeObject}/>}
 
-      <div className='flex flex-col gap-1 pb-4 border-b' >
-        <div className='flex items-center gap-2 justify-between'>
-        <p className='text-sm font-semibold text-nowrap'>radius :</p>
-           <Input
-        type="number"
-        min={0}
-        step={1}
-        value={radius}
-        onChange={(e) => handleRadiusChange(Number(e.target.value))}
-        className=''
-      />
-        </div>
-         <Slider min={0}  
-   max={1000}
-  value={[radius]}
-  step={1}
-  onValueChange={(e)=>{
-     handleRadiusChange(e[0])
-  }}
-  />
-      </div>
       {/* //DELETE */}
         <div className='flex items-center justify-between px-2'>
   <p className='text-sm'>Romove Object</p>

@@ -2,7 +2,7 @@ import { mutation, query } from "./_generated/server";
 
 import { ConvexError, v } from "convex/values";
 export const uploadImage = mutation({
-    args: {url: v.string(),fileId:v.string()},
+    args: {url: v.string(),fileId:v.string(),name:v.string()},
     handler:async(ctx,args)=>{
         const identity =await ctx.auth.getUserIdentity()
         if(!identity) throw new ConvexError("please login to upload");
@@ -12,7 +12,8 @@ export const uploadImage = mutation({
         const data = await ctx.db.insert("image",{
             user_id:userId,
             url,
-            file_id:args.fileId
+            file_id:args.fileId,
+            name:args.name
         });
         return {
             _id:data,
@@ -23,9 +24,9 @@ export const uploadImage = mutation({
     }
 });
 export const getImages= query({
-    handler:async(ctx,{cursor})=>{
+    handler:async(ctx)=>{
          const identity =await ctx.auth.getUserIdentity()
-        if(!identity) throw new ConvexError("please login ");
+        if(!identity) return []
         const userId = identity.subject;
         const data =await ctx.db.query("image").filter((q)=>q.eq(q.field("user_id"),userId))
         .order("desc").take(50)

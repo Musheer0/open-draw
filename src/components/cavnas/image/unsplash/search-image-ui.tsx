@@ -45,7 +45,7 @@ export const UnsplashImagePicker = ({ onSelectImage }: Props) => {
       {showHint && (
         <p className="text-xs text-muted-foreground">press enter to search</p>
       )}
-      <div className="results masonry overflow-y-auto thin-scrollbar gap-2 h-[400px] w-full py-2">
+      <div className="results  overflow-y-auto thin-scrollbar gap-2 h-[400px] w-full py-2">
         {isLoading && (
           <p className="text-sm text-muted-foreground animate-pulse">
             Looking for Images...
