@@ -247,10 +247,14 @@ body {
 .rc-editable-input-4{
   color: white !important;
 }
-.masonry{
-  display: grid;
-  grid-template-columns: repeat(auto-file, minmax(150px,1fr));
-  grid-template-rows: masonry;
+.masonry {
+  column-width: 150px; 
+  column-gap: 1px;  
+}
+
+.masonry > * {
+  break-inside: avoid;
+  margin-bottom: 1rem;
 }
 .transparent {
   background-color: var(--background);
