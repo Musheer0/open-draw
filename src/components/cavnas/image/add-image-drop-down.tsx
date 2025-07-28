@@ -1,10 +1,13 @@
 "use client"
-import { Button } from '@/components/ui/button'
+import UploadImageButton from '@/components/images/upload-button'
 import { Input } from '@/components/ui/input'
 import React, { useState } from 'react'
 import { useCanvas } from '../canvas-provider'
 import { FabricImage } from 'fabric'
 import { SearchUnsplashImage } from './unsplash/search-image'
+import { Folder, UploadCloudIcon } from 'lucide-react'
+import { useAssetManager } from '@/components/images/assets-manager-provider'
+import { Button } from '@/components/ui/button'
 
 const AddImageDropDown = () => {
     const [query ,setQuery] = useState('');
@@ -12,6 +15,7 @@ const AddImageDropDown = () => {
     const [results ,setResults] = useState<string[]>([]);
     const [isLoading ,setIsLoading] = useState(false);
     const {canvas} = useCanvas();
+    const {isAssetManagerOpen,setAssetManagerOpen}= useAssetManager()
      const handleSubmit = async () => {
     if (!query.trim()) return;
     setIsLoading(true);
@@ -34,10 +38,10 @@ const AddImageDropDown = () => {
       // const originalWidth = canvasImage.width!;
         // const scale = canvas.width / originalWidth;
         canvasImage.set({
-            scaleX:0.5,
-            scaleY:0.5,
-            left:0,
-            top:0,
+            scaleX:canvasImage.width<=100 ? 1:0.5,
+            scaleY:canvasImage.width<=100 ? 1:0.5,
+            left:10,
+            top:10,
             
         });
         canvas.add(canvasImage);
@@ -49,7 +53,21 @@ const AddImageDropDown = () => {
             <p className='text-muted-foreground text-sm'>Add Image</p>
         </div>
         <div className="body flex flex-col p-2 gap-2">
-            <Button disabled={isLoading} variant={'outline'} className='rounded-full cursor-pointer'>Upload Image</Button>
+           <UploadImageButton
+           onUploadComplete={(e)=>{
+            AddImage(e.url)
+           }}
+           className="border bg-background shadow-xs py-2 hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+           >
+            <UploadCloudIcon size={14}/> Upload Image
+           </UploadImageButton>
+           <Button 
+           onClick={()=>{
+            setAssetManagerOpen(!isAssetManagerOpen)
+           }}
+           variant={'outline'}>
+            <Folder/> Browse your assets
+           </Button>
             <div className='relative flex items-center py-2 gap-1'>
                 <div className="left flex-1 border-b"></div>
                 <p className='text-muted-foreground'>or</p>

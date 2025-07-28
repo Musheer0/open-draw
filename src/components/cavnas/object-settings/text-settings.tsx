@@ -129,6 +129,7 @@ const fontFamilies = [
   { name: "Fira Code", safe: false }, // added
   { name: "Franklin Gothic Medium", safe: true },
   { name: "Garamond", safe: true },
+  { name: "Host Grotesk", safe: true },
   { name: "Geneva", safe: true },
   { name: "Georgia", safe: true },
   { name: "Goudy Old Style", safe: true },

@@ -3,6 +3,7 @@ import {Host_Grotesk} from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import ConvexClerkClient from "@/components/providers/convex-clerk-provider";
+import { TRPCProvider } from "@/trpc/client";
 const font = Host_Grotesk({
   subsets:['latin-ext','latin']
 })
@@ -31,7 +32,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-        {children}
+        <TRPCProvider>
+          {children}
+        </TRPCProvider>
         </ThemeProvider>
       </body>
     </html>
