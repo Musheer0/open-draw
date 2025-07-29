@@ -71,21 +71,10 @@ Here’s a quick `README.md` snippet-style opinion drop:
 
 #### ⭐ Rating: `8.5 / 10`
 
-#### ✅ Pros
-* **Solid Stack:** Next.js + Convex + FabricJS + TRPC = spicy modern sauce.
-* **Live Canvas + Cropper:** Functional already? You're cooking.
-
-#### ❌ Cons
-
-* **Undo/Redo needs love:** Caching events ≠ full state diffing. You'll need a smarter history engine (think: diff patches, debounce, maybe an immutable data structure like Immer).
-* **UI/UX polish pending:** Feels raw (expected at early stage).
-* **No auto-save / versioning (yet):** Users gonna rage if they lose progress.
-
 #### 📈 Improvements
 
 * Implement undo/redo using JSON diffing or object snapshots with debounce and size-based filtering.
 * Add "save draft" + "export as" buttons (even dummy ones for now).
-* Focus on small wins: text tool, layer stack, copy/paste.
 ---
 
 ## 💬 Feedback / Bugs
