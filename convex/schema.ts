@@ -8,11 +8,12 @@ export default defineSchema({
         file_id:v.string(),
         name:v.optional(v.string())
     }),
-    craf:defineTable({
+    craft:defineTable({
         name: v.string(),
         user_id:v.string(),
         width:v.number(),
         height:v.number(),
-        
-    })
+        data:v.any(),
+    }),
+
 })

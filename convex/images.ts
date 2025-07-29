@@ -15,6 +15,7 @@ export const uploadImage = mutation({
             file_id:args.fileId,
             name:args.name
         });
+      
         return {
             _id:data,
             url,

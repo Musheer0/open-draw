@@ -38,7 +38,10 @@ const UploadButton = ({
   const uploadImage = async (files: FileList) => {
     if (!files || files.length === 0) throw new Error("No file selected")
     const file = files[0]
-
+    const MAX_SIZE_MB = 5;
+if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+  throw Error("Bruh, file too big. Max allowed is 5MB.")
+}
     const auth = await trpc.images.upload.mutate()
     if (!auth) throw new Error("Failed to get ImageKit auth")
 
