@@ -39,14 +39,36 @@ export const ColorPicker = ({
           onClick={() => setIsOpen(!isOpen)}
         />
           </PopoverTrigger>
-          <PopoverContent>
+          <PopoverContent className='flex flex-col gap-2'>
+            <Input
+                          value={value}
+            onChange={(e)=>{
+              onChange(e.target.value)
+            }}
+            placeholder='Have color code? past here'/>
                <MuiColorPicker
               value={value}
-              
+               disableTextfield
+               
               onChange={(color) => {
                 //@ts-ignore
-                onChange(color.css?.backgroundColor ?? '')
-              }}
+    const { alpha, rgb, hex } = color;
+
+    let finalColor = '';
+
+    try {
+      if (alpha !== 1) {
+      const [r, g, b] = rgb;
+      finalColor = `rgba(${r}, ${b}, ${g}, ${alpha})`;
+    } else {
+      finalColor = `#${hex}`;
+    }
+
+    } catch (error) {
+            finalColor = `#${hex}`;
+    }
+    onChange(finalColor);
+  }}
             />
           </PopoverContent>
         </Popover>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import ConvexClerkClient from "@/components/providers/convex-clerk-provider";
 import { TRPCProvider } from "@/trpc/client";
+import { Toaster } from "sonner";
 const font = Host_Grotesk({
   subsets:['latin-ext','latin']
 })
@@ -33,6 +34,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
         <TRPCProvider>
+          <Toaster richColors/>
           {children}
         </TRPCProvider>
         </ThemeProvider>

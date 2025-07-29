@@ -9,12 +9,12 @@ import { useCanvasStore } from '@/stores/canvas-state-store';
 const Canvas = ({w,h,data,id}:{w:number,h:number,data:any|null,id?:string}) => {
     const canvasRef = useRef<HTMLCanvasElement|null>(null);
     const [canvas ,setCanvas] = useState<FCanvas|null>(null);
-    const {setId} = useCanvasStore()
+    const {setId,setIsSaved} = useCanvasStore();
     const {setCanvas:setCanvasContext,canvas:CanvasContext} = useCanvas();
  useEffect(()=>{
      const fabricCanvas = new FCanvas(canvasRef.current!, {
-    width: w <= 500 ? w : w<=1000 ? w/1.5:w / 2,
-    height: w <= 500 ? h : w<=1000 ? h/1.5:h / 2,
+    width: w <= 1000 ? w :w / 2,
+    height: w <= 1000 ? h :h / 2,
     backgroundColor: '#ffff',
     preserveObjectStacking: true,
   });
@@ -34,6 +34,7 @@ if (!canvasRef.current || !w || !h||!CanvasContext||!canvas ) return;
     await canvas.loadFromJSON(data);
       canvas.renderAll();
       canvas.requestRenderAll();
+      setIsSaved(true)
   }  
  }
  useEffect(() => {

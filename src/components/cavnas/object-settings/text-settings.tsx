@@ -192,7 +192,7 @@ const TextSettings = () => {
     }
   }
   const updateStatus = ()=>{
-    if(isFont){
+    if(canvas && activeObject && activeObject instanceof IText){
       const weight = activeObject.fontWeight;
       setFontWeight(weight.toString());
       const font_size = activeObject.fontSize;
@@ -211,7 +211,7 @@ const TextSettings = () => {
       canvas.off("selection:updated", handleSelection)
       canvas.off("selection:cleared",handleSelection)
     }
-  }, [canvas])
+  }, [canvas,activeObject])
   useEffect(()=>{
     updateStatus()
   },[activeObject])
@@ -320,8 +320,9 @@ const TextSettings = () => {
     <label className="text-sm whitespace-nowrap">Line Height:</label>
     <Input
       type="number"
-      min={0.1}
+      min={0}
       max={5}
+      step={0.1}
       value={lineHeight}
       onChange={(e) => HandlelineHeight(Number(e.target.value))}
       className="w-[3.9rem] pr-0 text-sm"

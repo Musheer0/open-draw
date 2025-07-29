@@ -9,6 +9,7 @@ import { useImageUpload } from '@/hooks/use-image-upload';
 import { Button } from '../ui/button';
 import { useCanvas } from './canvas-provider';
 import { Id } from '../../../convex/_generated/dataModel';
+import { toast } from 'sonner';
 const SaveCanvas = () => {
     const convex = useConvex();
     const {isSaved ,setIsSaved,id}= useCanvasStore();
@@ -20,7 +21,6 @@ const SaveCanvas = () => {
                   if (isSaved || !canvas ||!id) return
       // Convert Fabric canvas to blob
       const htmlCanvas = canvas.getElement() as HTMLCanvasElement;
-
         const blob: Blob = await new Promise((resolve, reject) => {
             htmlCanvas.toBlob((b) => {
              if (b) resolve(b)
@@ -28,12 +28,14 @@ const SaveCanvas = () => {
              }, "image/png")
             })
             // Convert blob to file for ImageKit
+            toast.loading("saving changes.. please dont do anything")
             const file = new File([blob], `${id}.png`, { type: "image/png" })
             const poster = await mutate(file);
             await convex.mutation(api.crafts.updateCraft,{id:id as Id<"craft">,poster,data:canvas.toJSON()});
             canvas.requestRenderAll()
-            setIsSaved(true);     
-            
+            setIsSaved(true); 
+            toast.dismiss();    
+            toast.success("saved changes")
             } catch (error) {
                 
             }
