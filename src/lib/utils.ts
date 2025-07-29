@@ -1,78 +1,95 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-
+import {
+  Instagram,
+  Youtube,
+  Presentation,
+  FileText,
+  Facebook,
+  Twitter,
+  Linkedin,
+  ImageIcon,
+  LucideIcon
+} from 'lucide-react';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const canvasSizeOptions = [
-    {
-        name: 'Instagram Post',
-        width: 500,
-        height: 500,
-        icon: '/instagram.png'
-    },
-    {
-        name: 'Instagram Story',
-        width: 473,
-        height: 700,
-        icon: '/instagram.png'
-    },
-    {
-        name: 'YouTube Thumbnail',
-        width: 700,
-        height: 394,
-        icon: '/youtube.png'
-    },
-    {
-        name: 'YouTube Banner',
-        width: 700,
-        height: 394,
-        icon: '/youtube-2.png'
-    },
-    {
-        name: 'YouTube Post',
-        width: 500,
-        height: 500,
-        icon: '/youtube.png'
-    },
-    {
-        name: 'PowerPoint Slide',
-        width: 700,
-        height: 394,
-        icon: '/ppt.png'
-    },
-    {
-        name: 'Flyer (A4)',
-        width: 508,
-        height: 700,
-        icon: '/circle.png'
-    },
-    {
-        name: 'Facebook Post',
-        width: 700,
-        height: 368,
-        icon: '/facebook.png'
-    },
-    {
-        name: 'Twitter Post',
-        width: 700,
-        height: 394,
-        icon: '/twitter.png'
-    },
-    {
-        name: 'LinkedIn Post',
-        width: 700,
-        height: 366,
-        icon: '/linkedin.png'
-    },
-    {
-        name: 'Pinterest Pin',
-        width: 467,
-        height: 700,
-        icon: '/pinterest.png'
-    },
+export const canvasSizeOptionsArray: {
+  name: string;
+  width: number;
+  height: number;
+  icon: LucideIcon;
+}[] = [
+  {
+    name: 'Post',
+    width: 500,
+    height: 500,
+    icon: Instagram,
+  },
+  {
+    name: 'Story',
+    width: 473,
+    height: 700,
+    icon: Instagram,
+  },
+  {
+    name: 'Thumbnail',
+    width: 700,
+    height: 394,
+    icon: Youtube,
+  },
+  {
+    name: 'Banner',
+    width: 700,
+    height: 394,
+    icon: Youtube,
+  },
+  {
+    name: 'Post',
+    width: 500,
+    height: 500,
+    icon: Youtube,
+  },
+  {
+    name: 'PPT ',
+    width: 700,
+    height: 394,
+    icon: Presentation,
+  },
+  {
+    name: 'Flyer',
+    width: 508,
+    height: 700,
+    icon: FileText,
+  },
+  {
+    name: 'Post',
+    width: 700,
+    height: 368,
+    icon: Facebook,
+  },
+  {
+    name: 'Post',
+    width: 700,
+    height: 394,
+    icon: Twitter,
+  },
+  {
+    name: 'Post',
+    width: 700,
+    height: 366,
+    icon: Linkedin,
+  },
+  {
+    name: 'Pinterest',
+    width: 467,
+    height: 700,
+    icon: ImageIcon, // closest match
+  },
 ];
+
+
 
 export const StickerList = [
     'https://cdn-icons-png.flaticon.com/256/428/428094.png',

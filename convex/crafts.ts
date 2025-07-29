@@ -4,10 +4,12 @@ import { mutation, query } from "./_generated/server";
 export const getAllCrafs = query({
     handler:async(ctx)=>{
           const identity =await ctx.auth.getUserIdentity()
-                if(!identity) return []
+                if(!identity) {
+                  console.log('no user')
+                  return []}
                 const userId = identity.subject;
-                const crafts = await ctx.db.query("craft")
-                .filter((f)=>f.eq("user_id",userId)).take(50)
+                const crafts = await ctx.db.query("craft") .withIndex("by_userId", (q) => q.eq("user_id", userId))
+      .take(50);
                 return crafts
     }   
 });

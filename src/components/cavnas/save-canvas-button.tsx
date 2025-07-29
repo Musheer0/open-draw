@@ -8,7 +8,7 @@ import { useCanvasStore } from '@/stores/canvas-state-store';
 import { useImageUpload } from '@/hooks/use-image-upload';
 import { Button } from '../ui/button';
 import { useCanvas } from './canvas-provider';
-i
+import { Id } from '../../../convex/_generated/dataModel';
 const SaveCanvas = () => {
     const convex = useConvex();
     const {isSaved ,setIsSaved,id}= useCanvasStore();
@@ -30,7 +30,7 @@ const SaveCanvas = () => {
             // Convert blob to file for ImageKit
             const file = new File([blob], `${id}.png`, { type: "image/png" })
             const poster = await mutate(file);
-            await convex.mutation(api.crafts.updateCraft,{id ,poster,data:canvas.toJSON()});
+            await convex.mutation(api.crafts.updateCraft,{id:id as Id<"craft">,poster,data:canvas.toJSON()});
             canvas.requestRenderAll()
             setIsSaved(true);     
             

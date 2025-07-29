@@ -14,6 +14,6 @@ export default defineSchema({
         height:v.number(),
         data:v.any(),
         poster:v.optional(v.string())
-    }),
+    }).index("by_userId", ['user_id']),
 
 })

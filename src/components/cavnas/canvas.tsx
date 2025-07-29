@@ -9,47 +9,36 @@ import { useCanvasStore } from '@/stores/canvas-state-store';
 const Canvas = ({w,h,data,id}:{w:number,h:number,data:any|null,id?:string}) => {
     const canvasRef = useRef<HTMLCanvasElement|null>(null);
     const [canvas ,setCanvas] = useState<FCanvas|null>(null);
-        const {setId} = useCanvasStore()
-
-    const {setCanvas:setCanvasContext} = useCanvas();
-    const {isSaved} = useCanvasStore()
- useEffect(() => {
-  if (!canvasRef.current && !w || !h) return;
-
-  // dispose any existing Fabric canvas attached to this element
-  // const existing = (canvasRef.current as any).__fabricInstance as FCanvas | undefined;
-  // if (existing) {
-  //   existing.dispose();
-    
-  //   delete (canvasRef.current as any).__fabricInstance;
-  // }
-
-  const fabricCanvas = new FCanvas(canvasRef.current!, {
+    const {setId} = useCanvasStore()
+    const {setCanvas:setCanvasContext,canvas:CanvasContext} = useCanvas();
+ useEffect(()=>{
+     const fabricCanvas = new FCanvas(canvasRef.current!, {
     width: w <= 500 ? w : w<=1000 ? w/1.5:w / 2,
     height: w <= 500 ? h : w<=1000 ? h/1.5:h / 2,
     backgroundColor: '#ffff',
     preserveObjectStacking: true,
   });
-  if(id){
-    setId(id)
-  }
-  if (data && isSaved) {
-    fabricCanvas.loadFromJSON(data,()=>{
+ setCanvas(fabricCanvas);
+  setCanvasContext(fabricCanvas);
         fabricCanvas.renderAll();
   fabricCanvas.requestRenderAll();
-    });
-  }
-
-
-  (canvasRef.current as any).__fabricInstance = fabricCanvas;
-
-  setCanvas(fabricCanvas);
-  setCanvasContext(fabricCanvas);
-
-  return () => {
+  return()=>{
     fabricCanvas.dispose();
-  };
-}, [w, h, data]);
+  }
+ },[])
+ const LoadProject =async()=>{
+
+if (!canvasRef.current || !w || !h||!CanvasContext||!canvas ) return; 
+  if(id && typeof data==='object'){
+    setId(id);
+    await canvas.loadFromJSON(data);
+      canvas.renderAll();
+      canvas.requestRenderAll();
+  }  
+ }
+ useEffect(() => {
+  LoadProject()
+}, [w, h, data,canvas]);
 
     const Duplicate =async (e:KeyboardEvent)=>{
       if((e.ctrlKey || e.metaKey)&& e.key=='d'){
@@ -57,15 +46,6 @@ const Canvas = ({w,h,data,id}:{w:number,h:number,data:any|null,id?:string}) => {
         await DuplicateObject(canvas)
       }
     };
-    //DUPLICATE FUNCTION
-    useEffect(()=>{
-      window.addEventListener("keydown",Duplicate);
-      return()=>{
-        window.removeEventListener("keydown",Duplicate)
-      }
-    });
-    
-    //DELECT FUNCTION
      const Delete =async (e:KeyboardEvent)=>{
         if(!canvas) return 
       if(e.key==='Delete'){
@@ -88,12 +68,6 @@ const Canvas = ({w,h,data,id}:{w:number,h:number,data:any|null,id?:string}) => {
       canvas.requestRenderAll(); 
     }      }
     };
-    useEffect(()=>{
-      window.addEventListener("keydown",Delete);
-      return()=>{
-        window.removeEventListener("keydown",Delete)
-      }
-    });
   const MoveFunction = (e: KeyboardEvent) => {
     if(!canvas) return;
     const activeObj = canvas.getActiveObject();
@@ -147,16 +121,20 @@ const Canvas = ({w,h,data,id}:{w:number,h:number,data:any|null,id?:string}) => {
       break;
   }
 }
+const AllListeners = (e:KeyboardEvent)=>{
+  Duplicate(e);
+  Delete(e);
+  MoveFunction(e)
+}
 useEffect(()=>{
-  window.addEventListener("keydown",MoveFunction);
+  window.addEventListener("keydown",AllListeners);
   return()=>{
-    window.removeEventListener("keydown",MoveFunction)
+    window.removeEventListener("keydown",AllListeners)
   }
 },[MoveFunction])
-    
+if(w && h) 
   return (
-    <div className='h-full p-20.5 mt-6.5  thin-scrollbar high-scroll items-cent justify-center  p-2 flex-1 flex   overflow-auto'>
-      
+    <div className='h-full py-20.5 mt-6.5  thin-scrollbar high-scroll items-cent justify-center  p-2 flex-1 flex   overflow-auto'>
         <canvas ref={canvasRef}  className='mx-auto'/>
     </div>
   )
