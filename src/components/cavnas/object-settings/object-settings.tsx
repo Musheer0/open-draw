@@ -15,6 +15,7 @@ import ImageFilers from './image-filters'
 import ImageSettings from './image-settings'
 import { ColorPicker as MuiColorPicker } from 'mui-color'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { useCanvasStore } from '@/stores/canvas-state-store'
 export const ColorPicker = ({
   title,
   onChange,
@@ -25,7 +26,6 @@ export const ColorPicker = ({
   value: string
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-
   return (
     <div className="flex items-center justify-between py-2 px-2 rounded-xl hover:bg-muted/10 transition-colors">
       <p className="text-sm font-medium">{title}</p>
@@ -67,7 +67,8 @@ const [scale, setScale] = useState({ x: 1, y: 1 })
 const [position, setPosition] = useState({ x: 0, y: 0 })
 const [padding, setPadding] = useState(0)
 const [dimensionsLocked, setDimensionsLocked] = useState(false)
-const [shadowEnabled,setShadowEnable] = useState(false)
+const [shadowEnabled,setShadowEnable] = useState(false);
+    const {setIsSaved} = useCanvasStore()
 const [borderRadius ,setBorderRadius] = useState({
     rx: 0,
     ry:  0,
@@ -84,6 +85,7 @@ const [borderRadius ,setBorderRadius] = useState({
   })
 const UpdateStatus = ()=>{
       if (activeObject instanceof FabricObject) {
+        setIsSaved(false)
         setSkew({
           x:activeObject.skewX,
           y:activeObject.skewY

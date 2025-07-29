@@ -10,7 +10,28 @@ import ObjectLayersSideBar from './object-layers/object-layers-sidebar'
 import { SnapToCenter } from './helpers/snapping-helpers'
 import AssetsManegement from '../images/assests-manager'
 import {AssetManagerProvider} from '@/components/images/assets-manager-provider'
+import { useQuery } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
+import { Loader2Icon } from 'lucide-react'
+
 const CanvasView = ({id}:{id:string}) => {
+  const data  = useQuery(api.crafts.getCraft,{id:id as Id<"craft">});
+
+if(data===undefined){
+  return(
+    <div className='w-full h-screen flex flex-col items-center justify-center'>
+      <Loader2Icon className='animate-spin'/>
+    </div>
+  )
+}
+if(!data)
+  return(
+  <div className='w-full h-screen flex flex-col items-center justify-center'>
+    Craft Not found
+    </div>
+  )
+if(data)
   return (
     <CanvasContextProvider>
       <AssetManagerProvider>
@@ -21,7 +42,7 @@ const CanvasView = ({id}:{id:string}) => {
         <CanvasToolBar/>
         <TextSettings/>
         <ObjectLayersSideBar/>
-        <Canvas/>
+        <Canvas w={data.width} h={data.height} data={data.data} id={id}/>
        <ObjectSettingsSideBar/>
         </main>
       </AssetManagerProvider>

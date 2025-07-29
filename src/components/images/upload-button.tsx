@@ -51,6 +51,7 @@ if (file.size > MAX_SIZE_MB * 1024 * 1024) {
       token: auth.token,
       expire: auth.expire,
       signature: auth.signature,
+      overwriteFile: true,
     })
 
     if (!result.url || !result.fileId) throw new Error("Image upload failed")

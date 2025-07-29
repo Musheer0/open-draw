@@ -12,6 +12,8 @@ import { useCanvas } from './canvas-provider'
 import { AddShape } from './utils'
 import { ModeToggle } from '../ui/mode-toggle'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { Button } from '../ui/button'
+import SaveCanvas from './save-canvas-button'
 const CanvasToolBar = () => {
     const {canvas} = useCanvas()
   return (
@@ -51,7 +53,8 @@ const CanvasToolBar = () => {
         })}
         
         <ModeToggle/>
-       <ExportCanvas title='test canvas'/>
+       <ExportCanvas title='open draw'/>
+       <SaveCanvas/>
         </div>
   )
 }

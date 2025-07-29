@@ -9,11 +9,11 @@ export default defineSchema({
         name:v.optional(v.string())
     }),
     craft:defineTable({
-        name: v.string(),
         user_id:v.string(),
         width:v.number(),
         height:v.number(),
         data:v.any(),
+        poster:v.optional(v.string())
     }),
 
 })

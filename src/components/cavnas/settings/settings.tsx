@@ -51,39 +51,6 @@ const Settings = () => {
         </Link>
       </div>
 
-      <div className="body">
-        <p>Canvas Dimensions</p>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <p className='text-sm font-semibold'>Width</p>
-            <Input
-              type='number'
-              value={width}
-              onChange={(e) => handleWidthChange(Number(e.target.value))}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <p className='text-sm font-semibold'>Height</p>
-            <Input
-              type='number'
-              value={height}
-              onChange={(e) => handleHeightChange(Number(e.target.value))}
-            />
-          </div>
-        </div>
-
-      
-
-        <div className="div flex gap-5 py-5 border-b items-center justify-between">
-          <div className="info flex flex-col">
-            <p className='text-lg font-bold'>Delete Craft</p>
-            <p className='text-xs text-muted-foreground'>⚠️ This will delete all of your work. You cannot recover it later.</p>
-          </div>
-          <Button size={'icon'} variant={'destructive'} onClick={handleDelete}>
-            <Trash2Icon />
-          </Button>
-        </div>
-      </div>
     </div>
   );
 };

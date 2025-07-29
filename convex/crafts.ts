@@ -15,28 +15,27 @@ export const createCraft =  mutation({
     args:{
         w:v.number(),
         h:v.number(),
-        name:v.optional(v.string()),
     },
-    handler:async(ctx,{w,h,name})=>{
+    handler:async(ctx,{w,h})=>{
           const identity =await ctx.auth.getUserIdentity()
                 if(!identity) return null
                 const userId = identity.subject;
-          await ctx.db.insert("craft",{
+         const id = await ctx.db.insert("craft",{
             user_id:userId,
             width:w,
             height:h,
-            name:name||'project',
             data:null
           })
+          return id
     }
 });
 export const updateCraft = mutation({
   args: {
     id: v.id("craft"),
     data: v.optional(v.any()),
-    name: v.optional(v.string()),
+    poster: v.optional(v.string()),
   },
-  handler: async (ctx, { id, data, name }) => {
+  handler: async (ctx, { id, data, poster}) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return null;
 
@@ -45,12 +44,26 @@ export const updateCraft = mutation({
     if (!craft || craft.user_id !== userId) return null;
 
     const updateFields: Record<string, any> = {};
-    if (name !== undefined) updateFields.name = name;
+    if (poster !== undefined) updateFields.poster = poster;
     if (data !== undefined) updateFields.data = data;
 
     if (Object.keys(updateFields).length > 0) {
       await ctx.db.patch(id, updateFields);
     }
+  },
+});
+export const getCraft = query({
+  args: {
+    id: v.id("craft"),
+  },
+  handler: async (ctx, { id,}) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
+
+    const userId = identity.subject;
+    const craft = await ctx.db.get(id);
+    if (!craft || craft.user_id !== userId) return null;
+    return craft
   },
 });
 

@@ -1,45 +1,56 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react'
 import { Canvas as FCanvas} from 'fabric'
-import { useSearchParams } from 'next/navigation';
 import { useCanvas } from './canvas-provider';
 import { DuplicateObject } from './utils';
-const Canvas = () => {
+import { useCanvasStore } from '@/stores/canvas-state-store';
+const Canvas = ({w,h,data,id}:{w:number,h:number,data:any|null,id?:string}) => {
     const canvasRef = useRef<HTMLCanvasElement|null>(null);
     const [canvas ,setCanvas] = useState<FCanvas|null>(null);
-    const searchParams = useSearchParams();
-    const {setCanvas:setCanvasContext,canvas:canvasContext} = useCanvas();
-  
-    useEffect(()=>{
-        if(!canvas && canvasRef.current){
-            const w = Number(searchParams.get('w'))||  500
-            const h = Number(searchParams.get('h'))|| 500
-            // const scale = window.devicePixelRatio|1
-            const initialize = new FCanvas(canvasRef.current,{
-                width:w/2,
-                height:h/2,
-                backgroundColor: '#ffff',
-                preserveObjectStacking:true
-            });
-            // initialize.set(
-            //  {
-            //   width:w*scale,
-            //   height:h*scale,
-            //   zoom:1
-            //  } 
-            // )
-            initialize.renderAll();
-            setCanvas(initialize);
-            setCanvasContext(initialize)
-        }
+        const {setId} = useCanvasStore()
 
-        return(()=>{
-        if(canvasContext){
-            canvasContext.dispose();
-        }
-        })      
-    },[]);
+    const {setCanvas:setCanvasContext} = useCanvas();
+    const {isSaved} = useCanvasStore()
+ useEffect(() => {
+  if (!canvasRef.current && !w || !h) return;
+
+  // dispose any existing Fabric canvas attached to this element
+  // const existing = (canvasRef.current as any).__fabricInstance as FCanvas | undefined;
+  // if (existing) {
+  //   existing.dispose();
+    
+  //   delete (canvasRef.current as any).__fabricInstance;
+  // }
+
+  const fabricCanvas = new FCanvas(canvasRef.current!, {
+    width: w <= 500 ? w : w<=1000 ? w/1.5:w / 2,
+    height: w <= 500 ? h : w<=1000 ? h/1.5:h / 2,
+    backgroundColor: '#ffff',
+    preserveObjectStacking: true,
+  });
+  if(id){
+    setId(id)
+  }
+  if (data && isSaved) {
+    fabricCanvas.loadFromJSON(data,()=>{
+        fabricCanvas.renderAll();
+  fabricCanvas.requestRenderAll();
+    });
+  }
+
+
+  (canvasRef.current as any).__fabricInstance = fabricCanvas;
+
+  setCanvas(fabricCanvas);
+  setCanvasContext(fabricCanvas);
+
+  return () => {
+    fabricCanvas.dispose();
+  };
+}, [w, h, data]);
+
     const Duplicate =async (e:KeyboardEvent)=>{
       if((e.ctrlKey || e.metaKey)&& e.key=='d'){
         e.preventDefault();

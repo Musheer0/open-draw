@@ -1,31 +1,52 @@
-import { auth } from '@clerk/nextjs/server'
+"use client";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}) {
-  const user = await auth()
-  const resolvedParams = await searchParams
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { toast } from "sonner";
 
-  const wRaw = resolvedParams?.w
-  const hRaw = resolvedParams?.h
+const Page = () => {
+  const searchParams = useSearchParams();
+ const  [isFetched,setIsFetched] =useState(false)
+  const width = parseInt(searchParams.get("w") || "100", 10);
+  const height = parseInt(searchParams.get("h") || "100", 10);
+ const mutate  =  useMutation(api.crafts.createCraft)
+  const isValid = !isNaN(width) && !isNaN(height);
+ const router  = useRouter()
+ const createCraft = async()=>{
+       const id =await mutate({w:width,h:height})
+      setIsFetched(true);
+      if(id){
+        router.push('/draw/'+id)
+      }
+      else{
+       toast.error("error")
+      }
+ }
+  useEffect(() => {
+    if (isValid && !isFetched) {
+        createCraft()
+    }
+  }, [width, height]);
 
-  const width = parseInt(Array.isArray(wRaw) ? wRaw[0] : wRaw || '0')
-  const height = parseInt(Array.isArray(hRaw) ? hRaw[0] : hRaw || '0')
-
-  if (width > 0 && height > 0) {
-    await doStuff(width, height)
+  if (!isValid) {
+    return (
+      <div className="flex items-center justify-center h-screen text-red-500">
+        Invalid query params, bro.
+      </div>
+    );
   }
 
-  return (
-    <div>
-      <p>User ID: {user.userId}</p>
-      <p>w: {width}, h: {height}</p>
-    </div>
-  )
-}
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-muted-foreground">
+        <Loader2 className="h-10 w-10 animate-spin mb-2" />
+        <p className="text-lg font-medium">Creating your craft...</p>
+      </div>
+    );
 
-async function doStuff(w: number, h: number) {
-  console.log('Triggered:', w, h)
-}
+
+};
+
+export default Page;

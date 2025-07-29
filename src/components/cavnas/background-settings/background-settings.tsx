@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import {ChromePicker} from 'react-color'
 import { useCanvas } from '../canvas-provider'
+import { useCanvasStore } from '@/stores/canvas-state-store'
 const BackgroundSettings = () => {
   const {canvas} = useCanvas();
     const [color, setColor] = useState('#ffffff');
+        const {setIsSaved} = useCanvasStore()
      useEffect(() => {
     if (canvas) {
       const bg = canvas.backgroundColor;
@@ -17,6 +19,7 @@ const BackgroundSettings = () => {
     setColor(newColor);
 
     if (canvas) {
+      setIsSaved(false)
        canvas.set({
                 backgroundColor:newColor
              });
