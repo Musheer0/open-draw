@@ -25,6 +25,8 @@ export const SnapToCenter= ()=>{
          activeObject.set({
             top: centerY
         })
+          canvas?.fire("object:modified", { target:activeObject });
+
     }
     canvas.renderAll();
     canvas.requestRenderAll();

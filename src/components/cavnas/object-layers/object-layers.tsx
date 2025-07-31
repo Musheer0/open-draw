@@ -77,23 +77,27 @@ const ObjectLayers = () => {
   const bringForward =(e:any)=>{
     if(canvas){
         canvas.bringObjectForward(e);
-        canvas.discardActiveObject()
+        canvas.discardActiveObject();
+        canvas?.fire("object:modified", { target: activeObj });
     }
 }
     const MoveToTop =(e:any)=>{
     if(canvas){
         canvas.bringObjectToFront(e);
+        canvas?.fire("object:modified", { target: activeObj });
     }
   }
     const MoveToBottom =(e:any)=>{
     if(canvas){
-        canvas.sendObjectToBack(e)
+        canvas.sendObjectToBack(e);
+        canvas?.fire("object:modified", { target: activeObj });
     }
   }
   const bringBackward = (e:any)=>{
     if(canvas){
         canvas.sendObjectBackwards(e)
-      canvas.discardActiveObject()
+      canvas.discardActiveObject();
+      canvas?.fire("object:modified", { target: activeObj });
       }
   }
 

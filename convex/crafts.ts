@@ -35,23 +35,15 @@ export const updateCraft = mutation({
   args: {
     id: v.id("craft"),
     data: v.optional(v.any()),
-    poster: v.optional(v.string()),
   },
-  handler: async (ctx, { id, data, poster}) => {
+  handler: async (ctx, { id, data}) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return null;
 
     const userId = identity.subject;
     const craft = await ctx.db.get(id);
     if (!craft || craft.user_id !== userId) return null;
-
-    const updateFields: Record<string, any> = {};
-    if (poster !== undefined) updateFields.poster = poster;
-    if (data !== undefined) updateFields.data = data;
-
-    if (Object.keys(updateFields).length > 0) {
-      await ctx.db.patch(id, updateFields);
-    }
+      await ctx.db.patch(id, {data});
   },
 });
 export const getCraft = query({

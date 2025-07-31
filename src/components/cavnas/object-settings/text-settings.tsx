@@ -179,7 +179,8 @@ const TextSettings = () => {
 
   const updateCanvas = () => {
     canvas?.renderAll()
-    canvas?.requestRenderAll()
+    canvas?.requestRenderAll();
+    canvas?.fire("object:modified", { target:activeObject });
   }
   const [fontSize ,setFontSize] = useState(0);
   const [lineHeight ,setLineHeight] = useState(1.16);

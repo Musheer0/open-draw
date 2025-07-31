@@ -31,10 +31,15 @@ const Canvas = ({w,h,data,id}:{w:number,h:number,data:any|null,id?:string}) => {
 if (!canvasRef.current || !w || !h||!CanvasContext||!canvas ) return; 
   if(id && typeof data==='object'){
     setId(id);
+    const activeObj =canvas?.getActiveObject()
+  
     await canvas.loadFromJSON(data);
       canvas.renderAll();
       canvas.requestRenderAll();
-      setIsSaved(true)
+      setIsSaved(true);
+      if(activeObj){
+      canvas.setActiveObject(activeObj)
+    }
   }  
  }
  useEffect(() => {
@@ -125,7 +130,11 @@ if (!canvasRef.current || !w || !h||!CanvasContext||!canvas ) return;
 const AllListeners = (e:KeyboardEvent)=>{
   Duplicate(e);
   Delete(e);
-  MoveFunction(e)
+  MoveFunction(e);
+  const activeObj=canvas?.getActiveObject()
+  if(activeObj){
+    canvas?.fire("object:modified", { target: activeObj });
+  }
 }
 useEffect(()=>{
   window.addEventListener("keydown",AllListeners);

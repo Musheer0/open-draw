@@ -27,6 +27,7 @@ const ImageFilers = ({obj}:{obj:FabricImage}) => {
   const updateCanvas = () => {
     canvas?.renderAll();
     canvas?.requestRenderAll();
+      canvas?.fire("object:modified", { target: obj });
   };
 
   const [objectFilter, setObjFilters] = useState(defaultFilters);

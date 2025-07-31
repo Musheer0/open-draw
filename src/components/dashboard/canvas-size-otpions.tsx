@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 
 const CavasSizeOtpions = () => {
   return (
-    <div className='flex  thin-scrollbar pt-10 overflow-x-auto gap-2'>
+    <div className='flex  thin-scrollbar justify-center items-center w-full mx-auto pt-10 overflow-x-auto gap-2'>
     {canvasSizeOptionsArray.map((e,i)=>{
         return(
             <React.Fragment key={i}>
@@ -16,7 +16,7 @@ const CavasSizeOtpions = () => {
                     <div className='flex items-center justify-center bg-primary/5 text-primary rounded-full p-4'>
                         <e.icon/>
                     </div>
-                    <p className='text-sm '>{e.name}</p>
+                    <p className='text-sm relative '>{e.name}</p>
                 </Link>
             </React.Fragment>
         )

@@ -3,7 +3,6 @@
 "use client"
 import React, {  useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
-import { ChromePicker } from 'react-color'
 import { Circle, FabricObject, Rect, Shadow } from 'fabric'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
@@ -16,6 +15,7 @@ import ImageSettings from './image-settings'
 import { ColorPicker as MuiColorPicker } from 'mui-color'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useCanvasStore } from '@/stores/canvas-state-store'
+import GradientEditor from './gradient-editor'
 export const ColorPicker = ({
   title,
   onChange,
@@ -107,7 +107,8 @@ const [borderRadius ,setBorderRadius] = useState({
   })
 const UpdateStatus = ()=>{
       if (activeObject instanceof FabricObject) {
-        setIsSaved(false)
+        
+       
         setSkew({
           x:activeObject.skewX,
           y:activeObject.skewY
@@ -168,8 +169,7 @@ useEffect(()=>{
     canvas.on("object:rotating",UpdateStatus)
     canvas.on("object:resizing",UpdateStatus)
     canvas.on('selection:created', UpdateStatus);
-  canvas.on('selection:updated',UpdateStatus);
-  canvas.on("before:selection:cleared",UpdateStatus )
+  canvas.on("selection:cleared",UpdateStatus );
      return()=>{
     canvas.off('object:added',UpdateStatus)
     canvas.off('object:modified',UpdateStatus)
@@ -192,7 +192,8 @@ useEffect(()=>{
 },[shadowSettings])
   const updateCanvas = () => {
     canvas?.renderAll()
-    canvas?.requestRenderAll()
+    canvas?.requestRenderAll();
+      canvas?.fire("object:modified", { target: activeObject });
   }
 
   const handleFillColorChange = (color: string) => {
@@ -363,12 +364,13 @@ const handleBackgroundColor = (e:string|null)=>{
     handleDimensionChange("both", Math.round(value[0]))
   }
 
-  if (!canvas) return null
+  if (!canvas || !activeObject) return null
 
   return (
     <div className='flex flex-col pb-10 thin-scrollbar overflow-y-auto h-full flex-1 w-full gap-4 pt-5'>
       {activeObject?.type==='image' && <ImageSettings obj={activeObject}/>}
       <ColorPicker title='Background Color' value={Background} onChange={handleBackgroundColor} />
+      {/* <GradientEditor obj={activeObject} canvas={canvas}/> */}
       <ColorPicker title='Fill Color' value={fill} onChange={handleFillColorChange} />
       <ColorPicker title='Border Color' value={border.color} onChange={handleBorderColorChange} />
       {/* //BORDER */}

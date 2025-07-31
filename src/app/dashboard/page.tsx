@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { UserButton } from '@clerk/nextjs'
-import { ArrowLeft, ArrowRight, Sparkle, SparkleIcon } from 'lucide-react'
+import { ArrowLeft, ArrowRight, SearchIcon, Sparkle, SparkleIcon } from 'lucide-react'
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { AlertDialogAction } from '@radix-ui/react-alert-dialog'
 import { ModeToggle } from '@/components/ui/mode-toggle'
@@ -27,11 +27,14 @@ const page = () => {
                 <UserButton/>
             </div>
         </nav>
-        <div className="hero bg-gradient-to-b from-primary/10 rounded-2xl flex flex-col items-center justify-center w-full p-2 h-[60dvh]">
-            <h1 className='md:text-5xl  text-3xl  bg-gradient-to-b from-primary to-primary/50 bg-clip-text text-transparent py-2 leading-none'>
+        <div className="hero bg-gradient-to-b from-primary/10 min-h-screen rounded-2xl flex flex-col gap-5 items-center justify-center w-full p-2 h-[60dvh]">
+            <h1 className='md:text-5xl  text-3xl  bg-gradient-to-b from-primary to-primary/50 bg-clip-text text-transparent text-center py-2 leading-none'>
                 What will you design today?
             </h1>
-        
+            <div className="search w-[90%] max-w-xl bg-background flex items-center gap-2 p-2 rounded-full">
+                <input type="search" placeholder='Search projects'className='p-2 rounded-full focus:outline-none flex-1' />
+                <Button size={'icon'} className='rounded-full'> <SearchIcon/></Button>
+            </div>
         <CanvasSizeOptions/>
            <p className='text-sm text-muted-foreground'>
             or

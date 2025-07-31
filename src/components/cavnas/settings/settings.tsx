@@ -5,10 +5,13 @@ import { Github, Trash2Icon } from 'lucide-react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
+import { useCanvasStore } from '@/stores/canvas-state-store'
+import { Switch } from '@/components/ui/switch'
 
 const Settings = () => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
+  const {AutoSave,setAutoSave} = useCanvasStore()
   const { canvas } = useCanvas();
 
   useEffect(() => {
@@ -50,7 +53,15 @@ const Settings = () => {
           </Button>
         </Link>
       </div>
-
+      <div className='py-3 flex items-center justify-between'>
+        <p>Enable AutoSave<span className='text-xs text-muted-foreground'>(unstable)</span></p>
+        <Switch
+        checked={AutoSave}
+        onClick={()=>{
+          setAutoSave(!AutoSave)
+        }}
+        />
+      </div>
     </div>
   );
 };
