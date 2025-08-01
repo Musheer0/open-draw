@@ -1,5 +1,5 @@
 "use client"
-import { useConvex,  useQuery } from "convex/react";
+import {useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,6 @@ import { FabricImage } from "fabric";
 import { useState } from "react";
 
 const AssetsManegement = () => {
-   const convex = useConvex();
   const { user } = useUser();
   const {canvas} = useCanvas();
   const {isAssetManagerOpen,setAssetManagerOpen} = useAssetManager()

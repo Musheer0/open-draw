@@ -1,5 +1,5 @@
 import { InsertOptionsSlug } from "@/canvas-options";
-import { Canvas, Circle, Ellipse, FabricImage, FabricObject, IText, Line,  Polygon, Rect, Shadow, Triangle } from "fabric";
+import { Canvas, Circle, Ellipse, FabricObject, IText, Line,  Polygon, Rect, Shadow, Triangle } from "fabric";
 export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
     
     if(canvas){

@@ -1,7 +1,6 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Github, Trash2Icon } from 'lucide-react'
+import { Github} from 'lucide-react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
@@ -47,7 +46,7 @@ const Settings = () => {
     <div className='p-2 w-md max-h-[50dvh] flex flex-col gap-4'>
       <div className="header w-full gap-2 pb-2 border-b flex items-center justify-between">
         <p>Canvas Settings</p>
-        <Link href={''}>
+        <Link href={'https://github.com/Musheer0/open-draw'}>
           <Button size={'sm'}>
             <Github />
             Contribute

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { useCanvas } from "../canvas-provider"
 import { Button } from "@/components/ui/button"
-import { LockIcon, LockOpenIcon, ScissorsIcon, Trash2Icon } from "lucide-react" 
+import { LockIcon, LockOpenIcon,  Trash2Icon } from "lucide-react" 
 import {  BringToFront, EyeIcon, EyeOffIcon, MoreHorizontalIcon, MoveDownIcon, MoveUpIcon, SendToBack } from "lucide-react"
 import { cn } from "@/lib/utils"
     import {

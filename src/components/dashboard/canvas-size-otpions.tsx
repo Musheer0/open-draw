@@ -1,7 +1,6 @@
 import { canvasSizeOptionsArray } from '@/lib/utils'
 import Link from 'next/link'
 import React from 'react'
-import { Button } from '../ui/button'
 
 const CavasSizeOtpions = () => {
   return (

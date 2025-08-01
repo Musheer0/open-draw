@@ -12,7 +12,6 @@ import { useCanvas } from './canvas-provider'
 import { AddShape } from './utils'
 import { ModeToggle } from '../ui/mode-toggle'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu'
-import { Button } from '../ui/button'
 import SaveCanvas from './save-canvas-button'
 const CanvasToolBar = () => {
     const {canvas} = useCanvas()

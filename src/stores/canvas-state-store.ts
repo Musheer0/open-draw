@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import type { Canvas } from "fabric";
 
 type CanvasStore = {
   id: string;

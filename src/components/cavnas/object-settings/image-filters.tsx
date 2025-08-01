@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCanvas } from '../canvas-provider';
 import { FabricImage,filters } from 'fabric';
-import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { filtersMeta } from './filters';
 import { Switch } from '@/components/ui/switch';
