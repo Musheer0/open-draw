@@ -23,8 +23,8 @@ export const GetGradient =(   type: "linear"|"radial",w:number)=>{
             y2:0
         },
         colorStops:[
-            {offset:0,color:'black'},
-            {offset:1,color:'red'}
+            {offset:0,color:'#ffff'},
+            {offset:1,color:'#0000'}
         ]
     })
 }

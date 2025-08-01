@@ -370,7 +370,7 @@ const handleBackgroundColor = (e:string|null)=>{
     <div className='flex flex-col pb-10 thin-scrollbar overflow-y-auto h-full flex-1 w-full gap-4 pt-5'>
       {activeObject?.type==='image' && <ImageSettings obj={activeObject}/>}
       <ColorPicker title='Background Color' value={Background} onChange={handleBackgroundColor} />
-      {/* <GradientEditor obj={activeObject} canvas={canvas}/> */}
+      <GradientEditor obj={activeObject} canvas={canvas}/>
       <ColorPicker title='Fill Color' value={fill} onChange={handleFillColorChange} />
       <ColorPicker title='Border Color' value={border.color} onChange={handleBorderColorChange} />
       {/* //BORDER */}
