@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { useCanvas } from '../canvas-provider'
 import { useCanvasStore } from '@/stores/canvas-state-store'
 import { Switch } from '@/components/ui/switch'
+import KeyboardShortcutsDialog from '../helpers/keyboar-shortcuts'
 
 const Settings = () => {
   const [width, setWidth] = useState(0);
@@ -61,6 +62,10 @@ const Settings = () => {
           setAutoSave(!AutoSave)
         }}
         />
+      </div>
+      <div className='py-3 flex items-center justify-between'>
+        <p>KeyBoard ShortCuts</p>
+        <KeyboardShortcutsDialog/>
       </div>
     </div>
   );

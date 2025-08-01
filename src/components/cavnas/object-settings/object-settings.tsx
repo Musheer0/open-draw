@@ -371,7 +371,7 @@ const handleBackgroundColor = (e:string|null)=>{
       {activeObject?.type==='image' && <ImageSettings obj={activeObject}/>}
       <ColorPicker title='Background Color' value={Background} onChange={handleBackgroundColor} />
       <GradientEditor obj={activeObject} canvas={canvas}/>
-      <ColorPicker title='Fill Color' value={fill} onChange={handleFillColorChange} />
+      {typeof activeObject?.fill==='string' && <ColorPicker title='Fill Color' value={fill} onChange={handleFillColorChange} />}
       <ColorPicker title='Border Color' value={border.color} onChange={handleBorderColorChange} />
       {/* //BORDER */}
       <div className='flex items-center justify-between px-2'>

@@ -1,12 +1,11 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import CanvasSizeOptions from '@/components/dashboard/canvas-size-otpions'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { UserButton } from '@clerk/nextjs'
-import { ArrowLeft, ArrowRight, SearchIcon, Sparkle, SparkleIcon } from 'lucide-react'
+import { SparkleIcon } from 'lucide-react'
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
-import { AlertDialogAction } from '@radix-ui/react-alert-dialog'
 import { ModeToggle } from '@/components/ui/mode-toggle'
 import UserDesings from '@/components/dashboard/user-designs'
 const page = () => {
@@ -31,10 +30,10 @@ const page = () => {
             <h1 className='md:text-5xl  text-3xl  bg-gradient-to-b from-primary to-primary/50 bg-clip-text text-transparent text-center py-2 leading-none'>
                 What will you design today?
             </h1>
-            <div className="search w-[90%] max-w-xl bg-background flex items-center gap-2 p-2 rounded-full">
+            {/* <div className="search w-[90%] max-w-xl bg-background flex items-center gap-2 p-2 rounded-full">
                 <input type="search" placeholder='Search projects'className='p-2 rounded-full focus:outline-none flex-1' />
                 <Button size={'icon'} className='rounded-full'> <SearchIcon/></Button>
-            </div>
+            </div> */}
         <CanvasSizeOptions/>
            <p className='text-sm text-muted-foreground'>
             or

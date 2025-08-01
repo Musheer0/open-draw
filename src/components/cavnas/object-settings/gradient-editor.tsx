@@ -8,9 +8,11 @@ import {
   ArrowUpLeft, ArrowUpRight, ArrowDownLeft, ArrowDownRight
 } from 'lucide-react'
 import { GetGradient } from './gradients'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { cn } from '@/lib/utils'
-import { Input } from '@/components/ui/input'
+import { isEqual } from 'lodash';
+import { Slider } from '@/components/ui/slider'
+import { Label } from '@/components/ui/label'
 
 const GradientEditor = ({ obj, canvas }: { obj: FabricObject, canvas: Canvas }) => {
   const w = obj.getScaledWidth();
@@ -34,9 +36,18 @@ const GradientEditor = ({ obj, canvas }: { obj: FabricObject, canvas: Canvas }) 
   ];
 
   const [isEnabled, setIsEnable] = useState(typeof obj?.fill !== 'string');
-  const [activeDir, setActiveDir] = useState<keyof typeof dirToCoords>("right");
+ const getDirectionFromCoords = (coords: any) => {
+  return (Object.keys(dirToCoords) as (keyof typeof dirToCoords)[])
+    .find((key) => isEqual(dirToCoords[key], coords)) || "right";
+};
+
+const [activeDir, setActiveDir] = useState<keyof typeof dirToCoords>(
+    //@ts-ignore
+  getDirectionFromCoords(obj.fill?.coords)
+);
+
   //@ts-ignore
-  const [colorStops, setColorStops] = useState<{ offset: number, color: string }[]>(obj.fill?.colorStops || []);
+  const [colorStops, setColorStops] = useState<{ offset: number, color: string, opacity?: number }[]>(obj.fill?.colorStops || []);
   const [type, setType] = useState(obj?.fill instanceof Gradient ? obj?.fill.type : 'none');
 
   const updateGradient = (
@@ -49,7 +60,11 @@ const GradientEditor = ({ obj, canvas }: { obj: FabricObject, canvas: Canvas }) 
         type: obj.fill.type,
         coords,
         gradientUnits: obj.fill.gradientUnits ?? 'pixels',
-        colorStops: sortedStops
+        colorStops: sortedStops.map(s => ({
+          offset: s.offset,
+          color: s.color,
+          opacity: s.opacity ?? 1
+        }))
       }));
       canvas.requestRenderAll();
       canvas.fire("object:modified", { target: obj });
@@ -91,6 +106,13 @@ const GradientEditor = ({ obj, canvas }: { obj: FabricObject, canvas: Canvas }) 
     updateGradient(updated);
   };
 
+  const handleOpacityChange = (i: number, opacity: number) => {
+    const updated = [...colorStops];
+    updated[i].opacity = opacity / 100;
+    setColorStops(updated);
+    updateGradient(updated);
+  };
+
   const directions = [
     [<ArrowUpLeft />, <ArrowUp />, <ArrowUpRight />],
     [<ArrowLeft />, null, <ArrowRight />],
@@ -100,51 +122,70 @@ const GradientEditor = ({ obj, canvas }: { obj: FabricObject, canvas: Canvas }) 
   return (
     <div className='flex flex-col border-b border-t py-2'>
       <div className="header flex items-center justify-between gap-2">
-        <p className='text-sm font-semibold'>Gradient</p>
+        <p className='text-sm font-semibold'>Gradient<span className='text-xs text-muted-foreground'>(unstable)</span></p>
         <Switch checked={isEnabled} onClick={handleGradientChange} />
       </div>
 
       {isEnabled && (obj.fill instanceof Gradient) &&
         <>
           <Tabs defaultValue={type} className='w-full pt-5'>
-            {/* <TabsList>
-              <TabsTrigger value="linear">Linear</TabsTrigger>
-            </TabsList> */}
             <TabsContent value="linear">
-              <div className="color-slip w-full h-10"
+              <div className="color-slip w-full h-10 rounded"
                 style={{
-                  backgroundImage: `linear-gradient(${colorStops.map(stop => stop.color).join(',')})`
+                  backgroundImage: `linear-gradient(${colorStops.map(stop => {
+                    const alpha = (stop.opacity ?? 1).toFixed(2);
+                    return `${stop.color}${alpha === '1.00' ? '' : Math.round(+alpha * 255).toString(16).padStart(2, '0')}`
+                  }).join(',')})`
                 }}
               />
             </TabsContent>
           </Tabs>
 
-          <div className="color-stops flex flex-col gap-2 py-2">
-            <div className="header flex items-center justify-between">
-              <p className='text-sm font-bold'>Color Stops</p>
-            </div>
+          <div className="color-stops flex flex-col gap-4 py-4">
+            <p className='text-sm font-bold'>Color Stops</p>
 
             {colorStops.map((stop, i) => (
-              <div key={i} className='flex gap-4 p-2 items-center'>
+              <div key={i} className="flex flex-col gap-2 p-3 rounded-xl border border-zinc-800">
                 <input
                   type="color"
                   value={stop.color}
                   onChange={(e) => handleColorChange(i, e.target.value)}
+                  className="w-full h-10"
                 />
-                <Input
-                  type='number'
-                  min={0}
-                  max={100}
-                  step={1}
-                  className='w-[3.5rem] pr-0'
-                  value={Math.round(stop.offset * 100)}
-                  onChange={(e) => handleOffsetChange(i, Number(e.target.value))}
-                />
+
+                <div className="flex justify-between text-xs font-medium text-muted-foreground pt-1">
+                  <span>Offset: {Math.round((stop.offset ?? 0) * 100)}%</span>
+                  <span>Opacity: {Math.round((stop.opacity ?? 1) * 100)}%</span>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <div className='space-y-2'>
+                    <Label className="text-xs">Offset</Label>
+                    <Slider
+                      min={0}
+                      max={100}
+                      step={1}
+                      value={[Math.round((stop.offset ?? 0) * 100)]}
+                      onValueChange={(val) => handleOffsetChange(i, val[0])}
+                    />
+                  </div>
+                  <div className='space-y-2'>
+                    <Label className="text-xs">Opacity</Label>
+                    <Slider
+                      min={0}
+                      max={100}
+                      step={1}
+                      value={[Math.round((stop.opacity ?? 1) * 100)]}
+                      onValueChange={(val) => handleOpacityChange(i, val[0])}
+                    />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="direction w-full flex items-center py-2 justify-center">
+          <div className="direction w-full flex flex-col  gap-2 items-center py-2 justify-center">
+            <Label>Gradient Direction</Label>
             <div className="grid grid-cols-3 gap-2 w-fit p-2 rounded-2xl border border-zinc-700 bg-zinc-900">
               {directions.flatMap((row, rowIndex) =>
                 row.map((Icon, colIndex) => {
