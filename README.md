@@ -40,23 +40,10 @@
 
 ---
 
-## 🗺️ Roadmap (WIP)
-
-* [ ] Layer management
-* [ ] Text editing
-* [ ] Export designs as PNG/SVG
-* [ ] Templates (maybe 👀)
-* [ ] Offline mode?
-* [ ] Better undo/redo
-* [ ] Public share links
-* [ ] Collab mode (way later)
-
----
-
 ## 🛠️ Dev Setup
 
 ```bash
-git clone https://github.com/yourname/opendraw.git
+git clone https://github.com/Musheer0/open-draw
 cd opendraw
 pnpm install
 pnpm dev

@@ -91,10 +91,22 @@ const [activeDir, setActiveDir] = useState<keyof typeof dirToCoords>(
     setActiveDir(dir);
     updateGradient(colorStops, dirToCoords[dir]);
   };
+const hexToRgba = (hex: string, alpha = 1) => {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+const setAlpha = (rgba: string, newAlpha: number) => {
+  return rgba.replace(/rgba?\(([^)]+)\)/, (_, values) => {
+    const [r, g, b] = values.split(',').map((v:string) => parseFloat(v.trim()))
+    return `rgba(${r}, ${g}, ${b}, ${newAlpha})`
+  })
+}
 
   const handleColorChange = (i: number, color: string) => {
     const updated = [...colorStops];
-    updated[i].color = color;
+    updated[i].color = hexToRgba(color);
     setColorStops(updated);
     updateGradient(updated);
   };
@@ -108,7 +120,8 @@ const [activeDir, setActiveDir] = useState<keyof typeof dirToCoords>(
 
   const handleOpacityChange = (i: number, opacity: number) => {
     const updated = [...colorStops];
-    updated[i].opacity = opacity / 100;
+    updated[i].opacity = opacity/100
+    updated[i].color = setAlpha(updated[i].color, opacity/100)
     setColorStops(updated);
     updateGradient(updated);
   };
@@ -148,6 +161,7 @@ const [activeDir, setActiveDir] = useState<keyof typeof dirToCoords>(
               <div key={i} className="flex flex-col gap-2 p-3 rounded-xl border border-zinc-800">
                 <input
                   type="color"
+
                   value={stop.color}
                   onChange={(e) => handleColorChange(i, e.target.value)}
                   className="w-full h-10"

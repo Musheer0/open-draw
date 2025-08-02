@@ -1,5 +1,5 @@
 import { InsertOptionsSlug } from "@/canvas-options";
-import { Canvas, Circle, Ellipse, FabricObject, IText, Line,  Polygon, Rect, Shadow, Triangle } from "fabric";
+import { Canvas, Circle, Ellipse, FabricObject, Group, IText, Line,  Polygon, Rect, Shadow, Triangle } from "fabric";
 export const  AddShape = (canvas:Canvas|null, shape:InsertOptionsSlug)=>{
     
     if(canvas){
@@ -130,6 +130,29 @@ export const  DuplicateObject = async(canvas:Canvas|null)=>{
 
       canvas.requestRenderAll()
       }
+    // active.clone((cloned) => {
+    //   // Offset the clone so it's not stacked on top
+    //   cloned.set({
+    //     left: (active.left ?? 0) + 30,
+    //     top: (active.top ?? 0) + 30
+    //   })
+
+    //   canvas.add(cloned)
+    //   canvas.setActiveObject(cloned)
+    //   canvas.requestRenderAll()
+    // })
+
+    }
+}
+export const  GroupObject = async(canvas:Canvas|null)=>{
+    
+    if(canvas){
+        const active = canvas.getActiveObjects()
+    if (active.length>1) return
+       const group = new Group([...active])
+      canvas.add(group)
+
+      canvas.requestRenderAll()
     // active.clone((cloned) => {
     //   // Offset the clone so it's not stacked on top
     //   cloned.set({

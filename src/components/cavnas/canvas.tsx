@@ -2,9 +2,9 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Canvas as FCanvas} from 'fabric'
+import { FabricObject, Canvas as FCanvas} from 'fabric'
 import { useCanvas } from './canvas-provider';
-import { DuplicateObject } from './utils';
+import { DuplicateObject, GroupObject } from './utils';
 import { useCanvasStore } from '@/stores/canvas-state-store';
 const Canvas = ({w,h,data,id}:{w:number,h:number,data:any|null,id?:string}) => {
     const canvasRef = useRef<HTMLCanvasElement|null>(null);
@@ -50,6 +50,12 @@ if (!canvasRef.current || !w || !h||!CanvasContext||!canvas ) return;
       if((e.ctrlKey || e.metaKey)&& e.key=='d'){
         e.preventDefault();
         await DuplicateObject(canvas)
+      }
+    };
+    const Group =async (e:KeyboardEvent)=>{
+      if((e.ctrlKey || e.metaKey)&& e.key=='g'){
+        e.preventDefault();
+        await GroupObject(canvas)
       }
     };
      const Delete =async (e:KeyboardEvent)=>{
@@ -127,10 +133,12 @@ if (!canvasRef.current || !w || !h||!CanvasContext||!canvas ) return;
       break;
   }
 }
+
 const AllListeners = (e:KeyboardEvent)=>{
   Duplicate(e);
   Delete(e);
   MoveFunction(e);
+  Group(e)
   const activeObj=canvas?.getActiveObject()
   if(activeObj){
     canvas?.fire("object:modified", { target: activeObj });

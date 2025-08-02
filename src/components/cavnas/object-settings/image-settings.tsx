@@ -77,12 +77,11 @@ if(obj && canvas)
         <AlertDialogContent>
           <ImageCropper url={obj.getSrc()} onSubmit={(e)=>{
               obj.set({
-               cropX: e.left *obj.scaleX,
-  cropY: e.top*obj.scaleY ,
-  width: e.width*obj.scaleX,
-  height: e.height*obj.scaleY ,
-  scaleX: 0.6,
-  scaleY: 0.6,
+               cropX: e.left ,
+  cropY: e.top,
+  width: e.width,
+  height: e.height,
+  
               });
               obj.setCoords();
               canvas.renderAll()
