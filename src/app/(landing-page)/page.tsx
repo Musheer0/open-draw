@@ -14,7 +14,7 @@ const page = () => {
       <Features/>
       <Demo/>
       <div className="banner py-40 gap-5 w-full flex items-center flex-col justify-center border-t border-b border-zinc-50/10">
-        <h2 className='font-bold text-3xl sm:text-4xl md:text-6xl'>
+        <h2 className='font-bold text-3xl text-center sm:text-4xl md:text-6xl'>
           Make something cool in under 5 minutes
     </h2>
       <Link href={'/dashboard'}>

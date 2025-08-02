@@ -26,12 +26,12 @@ const Features = () => {
   ]
   return (
      <section id="features" className="container mx-auto px-4 py-20">
-        <h1 className='text-5xl md:text-6xl pt-40 tracking-tight leading-none  text-center py-10'>
+        <h1 className='text-4xl md:text-6xl pt-40 tracking-tight leading-none  text-center py-10'>
             Tools That Don’t Make You Cry
         </h1>
         <div className="flex flex-wrap relative items-center justify-center gap-8">
           {features.map((feature, index) => (
-            <div key={index} className="w-[70%] overflow-hidden relative sm:w-[300px] flex flex-col items-center justify-center h-[400px] shrink-0 border border-primary/10 shadow-none">
+            <div key={index} className="w-[80%] overflow-hidden relative sm:w-[300px] flex flex-col items-center justify-center h-[400px] shrink-0 border border-primary/10 shadow-none">
             <feature.icon size={60} className="mb-20  text-primary" />
                 <h3 className="text-2xl relative text-center font-semibold mb-2"> {feature.title}</h3>
                 <p className="text-muted-foreground relative text-sm">{feature.description}</p>

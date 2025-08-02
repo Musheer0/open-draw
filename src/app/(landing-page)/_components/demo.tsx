@@ -2,7 +2,7 @@ import React from 'react'
 
 const Demo = () => {
   return (
-    <section className='w-full  gap-2 py-20 flex flex-col px-20'>
+    <section className='w-full  gap-2 py-20 flex flex-col px-5 sm:px-20'>
         <h1 className='text-center text-4xl md:text-6xl'>
             See it in action.
         </h1>
