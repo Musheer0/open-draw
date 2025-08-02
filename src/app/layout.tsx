@@ -10,8 +10,29 @@ const font = Host_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: "Open Draw App ",
+  title: "Open Draw App",
   description: "Fast AF graphic design tool",
+  openGraph: {
+    title: "Open Draw App",
+    description: "Fast AF graphic design tool",
+    url: "https://open-draw.vercel.app",
+    siteName: "Open Draw",
+    images: [
+      {
+        url: "https://open-draw.vercel.app/og.png", 
+        width: 1200,
+        height: 630,
+        alt: "Open Draw App OG Image",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Open Draw App",
+    description: "Fast AF graphic design tool",
+    images: ["https://open-draw.vercel.app/og.png"],
+  },
 };
 
 export default function RootLayout({
